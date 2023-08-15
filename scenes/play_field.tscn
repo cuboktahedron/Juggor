@@ -1,0 +1,126 @@
+[gd_scene load_steps=10 format=3 uid="uid://bb3qaj5medfop"]
+
+[ext_resource type="Script" path="res://scripts/play_field.gd" id="1_rhdd0"]
+[ext_resource type="Script" path="res://scripts/hand.gd" id="2_ka83p"]
+[ext_resource type="Script" path="res://scripts/site_swap.gd" id="3_fl1td"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_ghahy"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_3jp6a"]
+radius = 5.0
+
+[sub_resource type="Curve2D" id="Curve2D_mjaid"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 45, -90, 0, 0, 0, 45, 0, -45, 45, 0, 0, 45, 0, 0, 0)
+}
+point_count = 3
+
+[sub_resource type="Curve2D" id="Curve2D_lmeli"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, -45, 0, 0, 0, 0, -45, 0, -45, -45, 0, 0, 0, 0, -90, 0)
+}
+point_count = 3
+
+[sub_resource type="Curve2D" id="Curve2D_1ovv8"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, -45, 0, 0, 0, 0, 45, 0, 45, -45, 0, 0, 0, 45, 90, 0)
+}
+point_count = 3
+
+[sub_resource type="Curve2D" id="Curve2D_dogqx"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 45, 90, 0, 0, 0, -45, 0, 45, 45, 0, 0, -45, 0, 0, 0)
+}
+point_count = 3
+
+[node name="PlayField" type="Node"]
+script = ExtResource("1_rhdd0")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="SiteSwap" type="HBoxContainer" parent="CanvasLayer"]
+offset_top = 40.0
+offset_right = 852.0
+offset_bottom = 80.0
+alignment = 1
+script = ExtResource("3_fl1td")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(426, 548)
+offset = Vector2(150, -224)
+
+[node name="LeftHand" type="Area2D" parent="."]
+z_index = 100
+position = Vector2(350, 548)
+script = ExtResource("2_ka83p")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="LeftHand"]
+modulate = Color(1, 0, 0, 1)
+scale = Vector2(30, 30)
+mesh = SubResource("SphereMesh_ghahy")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftHand"]
+shape = SubResource("CircleShape2D_3jp6a")
+
+[node name="LeftHandPathThrow" type="Path2D" parent="."]
+position = Vector2(350, 548)
+curve = SubResource("Curve2D_mjaid")
+
+[node name="HandPosition" type="PathFollow2D" parent="LeftHandPathThrow"]
+position = Vector2(-90, 0)
+rotation = 1.5708
+loop = false
+
+[node name="50017" type="Timer" parent="LeftHandPathThrow/HandPosition"]
+wait_time = 0.2
+one_shot = true
+
+[node name="LeftHandPathCatch" type="Path2D" parent="."]
+position = Vector2(350, 548)
+curve = SubResource("Curve2D_lmeli")
+
+[node name="HandPosition" type="PathFollow2D" parent="LeftHandPathCatch"]
+rotation = -1.5708
+loop = false
+
+[node name="50017" type="Timer" parent="LeftHandPathCatch/HandPosition"]
+wait_time = 0.2
+one_shot = true
+
+[node name="RightHand" type="Area2D" parent="."]
+modulate = Color(0, 0, 1, 1)
+z_index = 100
+position = Vector2(502, 552)
+script = ExtResource("2_ka83p")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="RightHand"]
+scale = Vector2(30, 30)
+mesh = SubResource("SphereMesh_ghahy")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightHand"]
+shape = SubResource("CircleShape2D_3jp6a")
+
+[node name="RightHandPathCatch" type="Path2D" parent="."]
+position = Vector2(502, 552)
+curve = SubResource("Curve2D_1ovv8")
+
+[node name="HandPosition" type="PathFollow2D" parent="RightHandPathCatch"]
+rotation = -1.5708
+loop = false
+
+[node name="50018" type="Timer" parent="RightHandPathCatch/HandPosition"]
+wait_time = 0.2
+one_shot = true
+
+[node name="RightHandPathThrow" type="Path2D" parent="."]
+position = Vector2(502, 552)
+curve = SubResource("Curve2D_dogqx")
+
+[node name="HandPosition" type="PathFollow2D" parent="RightHandPathThrow"]
+position = Vector2(90, 0)
+rotation = 1.5708
+loop = false
+
+[node name="50018" type="Timer" parent="RightHandPathThrow/HandPosition"]
+wait_time = 0.2
+one_shot = true

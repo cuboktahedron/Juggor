@@ -1,0 +1,121 @@
+[gd_scene load_steps=6 format=3 uid="uid://cph7vfyyu85qc"]
+
+[ext_resource type="Script" path="res://scripts/game.gd" id="1_a4xrq"]
+[ext_resource type="Script" path="res://scripts/control_panel.gd" id="2_dytvp"]
+[ext_resource type="Script" path="res://scripts/menus/file.gd" id="3_xq0xb"]
+[ext_resource type="Script" path="res://scripts/menus/patterns.gd" id="4_ccu3g"]
+[ext_resource type="Script" path="res://scripts/pause_screen.gd" id="5_4ghfj"]
+
+[node name="Game" type="Node"]
+script = ExtResource("1_a4xrq")
+
+[node name="ControlLayer" type="CanvasLayer" parent="."]
+
+[node name="ControlPanel" type="Panel" parent="ControlLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 852.0
+offset_top = 40.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_dytvp")
+
+[node name="Margin" type="MarginContainer" parent="ControlLayer/ControlPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBox" type="VBoxContainer" parent="ControlLayer/ControlPanel/Margin"]
+layout_mode = 2
+
+[node name="Gravity" type="VBoxContainer" parent="ControlLayer/ControlPanel/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="ControlLayer/ControlPanel/Margin/VBox/Gravity"]
+layout_mode = 2
+text = "Gravity: 1"
+
+[node name="HSlider" type="HSlider" parent="ControlLayer/ControlPanel/Margin/VBox/Gravity"]
+layout_mode = 2
+min_value = 0.25
+max_value = 4.0
+step = 0.25
+value = 1.0
+
+[node name="Time" type="VBoxContainer" parent="ControlLayer/ControlPanel/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="ControlLayer/ControlPanel/Margin/VBox/Time"]
+layout_mode = 2
+text = "Time: 1"
+
+[node name="HSlider" type="HSlider" parent="ControlLayer/ControlPanel/Margin/VBox/Time"]
+layout_mode = 2
+min_value = 0.25
+max_value = 4.0
+step = 0.25
+value = 1.0
+
+[node name="Zoom" type="VBoxContainer" parent="ControlLayer/ControlPanel/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="ControlLayer/ControlPanel/Margin/VBox/Zoom"]
+layout_mode = 2
+text = "Zoom: 1"
+
+[node name="HSlider" type="HSlider" parent="ControlLayer/ControlPanel/Margin/VBox/Zoom"]
+layout_mode = 2
+min_value = 0.25
+max_value = 1.0
+step = 0.25
+value = 1.0
+
+[node name="MenuBar" type="MenuBar" parent="ControlLayer"]
+offset_right = 40.0
+offset_bottom = 40.0
+size_flags_horizontal = 4
+
+[node name="File" type="PopupMenu" parent="ControlLayer/MenuBar"]
+item_count = 1
+item_0/text = "Quit"
+item_0/id = 0
+script = ExtResource("3_xq0xb")
+
+[node name="Patterns" type="PopupMenu" parent="ControlLayer/MenuBar"]
+item_count = 4
+item_0/text = "3"
+item_0/id = 0
+item_1/text = "4"
+item_1/id = 1
+item_2/text = "5"
+item_2/id = 3
+item_3/text = "1234567"
+item_3/id = 2
+script = ExtResource("4_ccu3g")
+
+[node name="PauseScreen" type="Node" parent="."]
+process_mode = 3
+script = ExtResource("5_4ghfj")
+
+[connection signal="gravity_changed" from="ControlLayer/ControlPanel" to="." method="_on_control_panel_gravity_changed"]
+[connection signal="time_changed" from="ControlLayer/ControlPanel" to="." method="_on_control_panel_time_changed"]
+[connection signal="zoom_changed" from="ControlLayer/ControlPanel" to="." method="_on_control_panel_zoom_changed"]
+[connection signal="value_changed" from="ControlLayer/ControlPanel/Margin/VBox/Gravity/HSlider" to="ControlLayer/ControlPanel" method="_on_gravity_changed"]
+[connection signal="value_changed" from="ControlLayer/ControlPanel/Margin/VBox/Time/HSlider" to="ControlLayer/ControlPanel" method="_on_time_changed"]
+[connection signal="value_changed" from="ControlLayer/ControlPanel/Margin/VBox/Zoom/HSlider" to="ControlLayer/ControlPanel" method="_on_zoom_changed"]
+[connection signal="id_pressed" from="ControlLayer/MenuBar/File" to="ControlLayer/MenuBar/File" method="_on_id_pressed"]
+[connection signal="change_pattern" from="ControlLayer/MenuBar/Patterns" to="." method="_on_patterns_change_pattern"]
+[connection signal="id_pressed" from="ControlLayer/MenuBar/Patterns" to="ControlLayer/MenuBar/Patterns" method="_on_id_pressed"]
