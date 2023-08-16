@@ -41,7 +41,6 @@ func throw(to: Hand, pattern: int):
 		return
 
 	var base_time = pattern - 0.5
-	print(base_time)
 	var actual_time = base_time * env.tempo
 	var ball: Ball = Ball.instantiate()
 	ball.position = position

@@ -1,10 +1,15 @@
-[gd_scene load_steps=6 format=3 uid="uid://cph7vfyyu85qc"]
+[gd_scene load_steps=9 format=3 uid="uid://cph7vfyyu85qc"]
 
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_a4xrq"]
 [ext_resource type="Script" path="res://scripts/control_panel.gd" id="2_dytvp"]
 [ext_resource type="Script" path="res://scripts/menus/file.gd" id="3_xq0xb"]
 [ext_resource type="Script" path="res://scripts/menus/patterns.gd" id="4_ccu3g"]
 [ext_resource type="Script" path="res://scripts/pause_screen.gd" id="5_4ghfj"]
+[ext_resource type="Script" path="res://scripts/change_pattern_form.gd" id="5_yr0dy"]
+[ext_resource type="Script" path="res://scripts/siteswap_txt.gd" id="6_brx3t"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3k44b"]
+bg_color = Color(0.12549, 0.12549, 0.12549, 1)
 
 [node name="Game" type="Node"]
 script = ExtResource("1_a4xrq")
@@ -12,14 +17,16 @@ script = ExtResource("1_a4xrq")
 [node name="ControlLayer" type="CanvasLayer" parent="."]
 
 [node name="ControlPanel" type="Panel" parent="ControlLayer"]
+custom_minimum_size = Vector2(300, 0)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 852.0
-offset_top = 40.0
+offset_top = 32.0
 offset_bottom = 4.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3k44b")
 script = ExtResource("2_dytvp")
 
 [node name="Margin" type="MarginContainer" parent="ControlLayer/ControlPanel"]
@@ -83,28 +90,87 @@ max_value = 1.0
 step = 0.25
 value = 1.0
 
-[node name="MenuBar" type="MenuBar" parent="ControlLayer"]
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="MenuBackground" type="ColorRect" parent="ControlLayer"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 32.0
+grow_horizontal = 2
+color = Color(0.12549, 0.12549, 0.12549, 1)
+
+[node name="MenuBar" type="MenuBar" parent="ControlLayer/MenuBackground"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -15.5
+offset_bottom = 15.5
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 4
 
-[node name="File" type="PopupMenu" parent="ControlLayer/MenuBar"]
+[node name="File" type="PopupMenu" parent="ControlLayer/MenuBackground/MenuBar"]
 item_count = 1
 item_0/text = "Quit"
 item_0/id = 0
 script = ExtResource("3_xq0xb")
 
-[node name="Patterns" type="PopupMenu" parent="ControlLayer/MenuBar"]
-item_count = 4
-item_0/text = "3"
+[node name="Patterns" type="PopupMenu" parent="ControlLayer/MenuBackground/MenuBar"]
+size = Vector2i(169, 170)
+item_count = 6
+item_0/text = "Change pattern"
+item_0/checkable = 1
 item_0/id = 0
-item_1/text = "4"
-item_1/id = 1
-item_2/text = "5"
-item_2/id = 3
-item_3/text = "1234567"
+item_1/text = ""
+item_1/id = 0
+item_1/separator = true
+item_2/text = "3"
+item_2/id = 1
+item_3/text = "4"
 item_3/id = 2
+item_4/text = "5"
+item_4/id = 3
+item_5/text = "1234567"
+item_5/id = 4
 script = ExtResource("4_ccu3g")
+
+[node name="ChangePatternForm" type="VBoxContainer" parent="ControlLayer"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -416.0
+offset_top = 4.0
+offset_right = 138.0
+offset_bottom = 65.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("5_yr0dy")
+
+[node name="HBox" type="HBoxContainer" parent="ControlLayer/ChangePatternForm"]
+layout_mode = 2
+size_flags_horizontal = 8
+alignment = 1
+
+[node name="SiteswapTxt" type="LineEdit" parent="ControlLayer/ChangePatternForm/HBox"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+size_flags_vertical = 0
+placeholder_text = "Please enter siteswap"
+script = ExtResource("6_brx3t")
+
+[node name="Button" type="Button" parent="ControlLayer/ChangePatternForm/HBox"]
+layout_mode = 2
+text = "Enter"
+
+[node name="ErrorMessage" type="Label" parent="ControlLayer/ChangePatternForm"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+text = "error message"
 
 [node name="PauseScreen" type="Node" parent="."]
 process_mode = 3
@@ -116,6 +182,12 @@ script = ExtResource("5_4ghfj")
 [connection signal="value_changed" from="ControlLayer/ControlPanel/Margin/VBox/Gravity/HSlider" to="ControlLayer/ControlPanel" method="_on_gravity_changed"]
 [connection signal="value_changed" from="ControlLayer/ControlPanel/Margin/VBox/Time/HSlider" to="ControlLayer/ControlPanel" method="_on_time_changed"]
 [connection signal="value_changed" from="ControlLayer/ControlPanel/Margin/VBox/Zoom/HSlider" to="ControlLayer/ControlPanel" method="_on_zoom_changed"]
-[connection signal="id_pressed" from="ControlLayer/MenuBar/File" to="ControlLayer/MenuBar/File" method="_on_id_pressed"]
-[connection signal="change_pattern" from="ControlLayer/MenuBar/Patterns" to="." method="_on_patterns_change_pattern"]
-[connection signal="id_pressed" from="ControlLayer/MenuBar/Patterns" to="ControlLayer/MenuBar/Patterns" method="_on_id_pressed"]
+[connection signal="id_pressed" from="ControlLayer/MenuBackground/MenuBar/File" to="ControlLayer/MenuBackground/MenuBar/File" method="_on_id_pressed"]
+[connection signal="change_pattern" from="ControlLayer/MenuBackground/MenuBar/Patterns" to="." method="_on_patterns_change_pattern"]
+[connection signal="change_pattern_toggled" from="ControlLayer/MenuBackground/MenuBar/Patterns" to="ControlLayer/ChangePatternForm" method="_on_patterns_change_pattern_toggled"]
+[connection signal="id_pressed" from="ControlLayer/MenuBackground/MenuBar/Patterns" to="ControlLayer/MenuBackground/MenuBar/Patterns" method="_on_id_pressed"]
+[connection signal="change_pattern" from="ControlLayer/ChangePatternForm" to="." method="_on_patterns_change_pattern"]
+[connection signal="change_pattern" from="ControlLayer/ChangePatternForm" to="ControlLayer/MenuBackground/MenuBar/Patterns" method="_on_change_pattern_form_change_pattern"]
+[connection signal="text_changed" from="ControlLayer/ChangePatternForm/HBox/SiteswapTxt" to="ControlLayer/ChangePatternForm/HBox/SiteswapTxt" method="_on_text_changed"]
+[connection signal="text_submitted" from="ControlLayer/ChangePatternForm/HBox/SiteswapTxt" to="ControlLayer/ChangePatternForm" method="_on_siteswap_txt_text_submitted"]
+[connection signal="pressed" from="ControlLayer/ChangePatternForm/HBox/Button" to="ControlLayer/ChangePatternForm" method="_on_button_pressed"]

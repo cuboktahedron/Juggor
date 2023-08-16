@@ -51,3 +51,7 @@ func _on_control_panel_time_changed(time: float):
 func _on_control_panel_zoom_changed(zoom: float):
 	env.zoom = zoom
 	current_play_field.change_zoom(zoom)
+
+
+func _on_change_pattern_form_change_pattern(patterns: Array):
+	reset_play_field(patterns)
