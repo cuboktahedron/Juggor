@@ -43,7 +43,7 @@ func _on_control_panel_time_changed(time: float):
 	Engine.set_time_scale(time)
 	
 	if time >= 1:
-		Engine.physics_ticks_per_second = 60 * time
+		Engine.physics_ticks_per_second = int(60 * time)
 	else:
 		Engine.physics_ticks_per_second = 60
 

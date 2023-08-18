@@ -5,7 +5,7 @@ var ball: Ball
 var _is_ball_entered := false
 
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	if _is_ball_entered and !ball.is_flying():
 		ball.queue_free()
 		queue_free()

@@ -14,7 +14,7 @@ func _on_siteswap_txt_text_submitted(siteswap: String):
 	_submit(siteswap)
 
 
-func _submit(siteswap: String):
+func _submit(_siteswap: String):
 	var patterns = _split_tokens(siteswap_txt.text)
 	if _is_valid_patterns(patterns):
 		change_pattern.emit(patterns)

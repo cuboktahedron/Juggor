@@ -33,9 +33,6 @@ func _physics_process(delta):
 
 
 func change_patterns(new_patterns: Array) -> bool:
-	if !_is_valid_patterns(new_patterns):
-		return false
-		
 	_patterns = new_patterns
 	
 	for child in get_children():
@@ -57,10 +54,6 @@ func _calc_ball_num(patterns):
 	for pattern in patterns:
 		sum += pattern
 	return sum / patterns.size()
-
-
-func _is_valid_patterns(patterns):
-	return true
 
 
 func _refresh():

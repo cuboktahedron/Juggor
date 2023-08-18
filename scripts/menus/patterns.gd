@@ -24,5 +24,5 @@ func _on_id_pressed(id):
 		change_pattern.emit([5])
 
 
-func _on_change_pattern_form_change_pattern(Array):
+func _on_change_pattern_form_change_pattern(_patterns: Array):
 	set_item_checked(MENU_ID_CHANGE_PATTERN, false)
