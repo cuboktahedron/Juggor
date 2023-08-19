@@ -47,7 +47,7 @@ func throw(to: Hand, pattern: int):
 	ball.gravity_scale = env.gravity_scale
 	var diff_pos = to._catch_position(to, base_time) - position;
 	var impulse = Vector2.ZERO
-		
+
 	impulse.x = diff_pos.x / actual_time
 	impulse.y = (diff_pos.y - 0.5 * env.gravity * actual_time ** 2) / actual_time
 

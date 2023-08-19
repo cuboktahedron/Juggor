@@ -16,21 +16,27 @@ func _ready():
 	env.zoom = _control_panel.zoom
 	env.tempo = 0.5
 
-	reset_play_field([3])
+	_reset_play_field([3])
 
 
-func reset_play_field(patterns: Array):
+func _reset_play_field(patterns: Array):
 	if current_play_field != null:
 		current_play_field.queue_free()
 
 	current_play_field = PlayField.instantiate()
 	current_play_field.env = env
+	current_play_field.auto_zoomed.connect(_on_play_field_auto_zoomed)
 	add_child(current_play_field)
+
 	current_play_field.set_pattern(patterns)
 
 
+func _on_play_field_auto_zoomed(zoom: float):
+	_control_panel.change_zoom(zoom)
+	
+	
 func _on_patterns_change_pattern(patterns: Array):
-	reset_play_field(patterns)
+	_reset_play_field(patterns)
 
 
 func _on_control_panel_gravity_changed(gravity: float):
@@ -54,4 +60,4 @@ func _on_control_panel_zoom_changed(zoom: float):
 
 
 func _on_change_pattern_form_change_pattern(patterns: Array):
-	reset_play_field(patterns)
+	_reset_play_field(patterns)

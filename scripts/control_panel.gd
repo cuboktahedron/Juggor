@@ -25,6 +25,11 @@ var zoom: float:
 @onready var _zoom_slider := $Margin/VBox/Zoom/HSlider
 
 
+func change_zoom(zoom: float):
+	_zoom_slider.value = zoom
+	_zoom_slider.value_changed.emit(_zoom_slider.value)
+
+	
 func _on_gravity_changed(_gravity):
 	_gravity_label.text = "gravity: %s" % str(gravity)
 	gravity_changed.emit(gravity)

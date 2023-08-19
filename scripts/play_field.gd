@@ -1,5 +1,7 @@
 extends Node
 
+signal auto_zoomed(zoom: float)
+
 var env = {}
 
 @onready var _camera: Camera2D = $Camera2D
@@ -49,6 +51,9 @@ func _physics_process(delta):
 func set_pattern(patterns: Array):
 	_site_swap.change_patterns(patterns)
 	
+	var zoom = _calculate_zoom(patterns)
+	auto_zoomed.emit(zoom)
+	
 
 func change_zoom(zoom: float):
 	_camera.zoom = Vector2(1.0, 1.0) * zoom
@@ -56,6 +61,32 @@ func change_zoom(zoom: float):
 	_camera.offset.y = -224 * 1.0 / zoom
 
 
+func _calculate_zoom(patterns: Array):
+	var max_pattern = 0
+	for pattern in patterns:
+		max_pattern = max(max_pattern, pattern)
+
+	if max_pattern <= 2:
+		return 1
+
+	var base_time = max_pattern - 0.5
+	var actual_time = base_time * env.tempo
+	var v0 = (-0.5 * env.gravity * actual_time ** 2) / actual_time
+	var t_hmax = -v0 / env.gravity
+	var hmax = (v0 * t_hmax - 0.5 * env.gravity * t_hmax ** 2) * env.tempo
+	
+	print("t_hmax=%s" % t_hmax)
+	print("hmax=%s" % hmax)
+
+	var zoom = 1.0
+	var i = 0
+	while 1.0 / zoom * 648 < -hmax:
+		zoom = 1.0 - i * 0.01 
+		i += 1
+	
+	return zoom
+	
+	
 func _progressed_pattern(hand: int, pattern: int):
 	_throw(hand, pattern)
 
