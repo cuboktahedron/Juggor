@@ -6,8 +6,8 @@ signal change_pattern_toggled(is_checked: bool)
 const MENU_ID_CHANGE_PATTERN = 0
 const MENU_ID_3 = 1
 const MENU_ID_4 = 2
-const MENU_ID_1234567 = 3
-const MENU_ID_5 = 4
+const MENU_ID_5 = 3
+const MENU_ID_1234567 = 4
 
 
 func _on_id_pressed(id):
@@ -18,10 +18,10 @@ func _on_id_pressed(id):
 		change_pattern.emit([3])
 	elif id == MENU_ID_4:
 		change_pattern.emit([4])
-	elif id == MENU_ID_1234567:
-		change_pattern.emit([1, 2, 3, 4, 5, 6, 7])
 	elif id == MENU_ID_5:
 		change_pattern.emit([5])
+	elif id == MENU_ID_1234567:
+		change_pattern.emit([1, 2, 3, 4, 5, 6, 7])
 
 
 func _on_change_pattern_form_change_pattern(_patterns: Array):
