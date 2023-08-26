@@ -41,7 +41,13 @@ func change_patterns(new_patterns: Array) -> bool:
 	for pattern in _patterns:
 		var label = Label.new()
 		label.add_theme_font_size_override("font_size", 32)
-		label.text = str(pattern)
+		
+		var pattern_label
+		if pattern <= 9:
+			pattern_label = str(pattern)
+		else:
+			pattern_label = String.chr(pattern - 10 + "A".unicode_at(0))
+		label.text = str(pattern_label)
 		add_child(label)
 
 	_ball_num = _calc_ball_num(_patterns)
