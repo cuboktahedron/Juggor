@@ -2,20 +2,17 @@ extends Node
 
 signal auto_zoomed(zoom: float)
 
+const Hand = preload("res://scenes/hand.tscn")
+
 var env = {}
+var _hands = []
 
 @onready var _camera: Camera2D = $Camera2D
-@onready var _left_hand: Hand = $LeftHand
-@onready var _right_hand: Hand = $RightHand
 @onready var _site_swap: Control = $CanvasLayer/SiteSwap
-
 
 func _ready():
 	_site_swap.env = env
 	_site_swap.progressed.connect(_progressed_pattern)
-
-	_left_hand.env = env
-	_right_hand.env = env
 	
 	change_zoom(env.zoom)
 
@@ -44,21 +41,51 @@ func _physics_process(delta):
 #	if Input.is_action_just_pressed("rh_throw"):
 #		_throw(1, 7)
 
-	_left_hand.position += lh_dir.normalized() * 400 * delta
-	_right_hand.position += rh_dir.normalized() * 400 * delta
 
+func setup(hands: Array, patterns: Array):
+	_setup_hands(hands)
+	_setup_patterns(patterns)
 
-func set_pattern(patterns: Array):
-	_site_swap.change_patterns(patterns)
-	
-	var zoom = _calculate_zoom(patterns)
-	auto_zoomed.emit(zoom)
-	
 
 func change_zoom(zoom: float):
 	_camera.zoom = Vector2(1.0, 1.0) * zoom
 	_camera.offset.x = 150 * (1.0 / zoom)
 	_camera.offset.y = -224 * 1.0 / zoom
+
+
+func _setup_hands(hands: Array):
+	
+	var hand_no = 0
+	for hand in hands:
+		var new_hand := Hand.instantiate()
+		new_hand.name = "Hand%s" % str(hand_no)
+		new_hand.env = env
+		new_hand.position = hand.position
+		new_hand.hand_no = hand_no
+		
+		var path_phase = 0
+		var hand_times = []
+		for path in hand.paths:
+			var hand_path_name = "%sPath%s" % [new_hand.name, str(path_phase)]
+			var hand_path = HandPath.new(hand_path_name, path.time, path.points)
+			hand_path.position = hand.position
+			add_child(hand_path)
+			new_hand.add_hand_path(hand_path)
+			hand_times.push_back(path.time)
+			path_phase += 1
+
+		new_hand.hand_times = hand_times
+		hand_no += 1
+		
+		_hands.push_back(new_hand)
+		add_child(new_hand)
+
+
+func _setup_patterns(patterns: Array):
+	_site_swap.change_patterns(patterns)
+
+	var zoom = _calculate_zoom(patterns)
+	auto_zoomed.emit(zoom)
 
 
 func _calculate_zoom(patterns: Array):
@@ -94,11 +121,11 @@ func _progressed_pattern(hand: int, pattern: int):
 func _throw(hand: int, pattern: int):
 	if hand == 0:
 		if pattern % 2 == 0:
-			_left_hand.throw(_left_hand, pattern)
+			_hands[hand].throw(_hands[0], pattern)
 		else:
-			_left_hand.throw(_right_hand, pattern)
+			_hands[hand].throw(_hands[1], pattern)
 	elif hand == 1:
 		if pattern % 2 == 0:
-			_right_hand.throw(_right_hand, pattern)
+			_hands[hand].throw(_hands[1], pattern)
 		else:
-			_right_hand.throw(_left_hand, pattern)
+			_hands[hand].throw(_hands[0], pattern)

@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://cph7vfyyu85qc"]
+[gd_scene load_steps=10 format=3 uid="uid://cph7vfyyu85qc"]
 
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_a4xrq"]
 [ext_resource type="Script" path="res://scripts/control_panel.gd" id="2_dytvp"]
 [ext_resource type="Script" path="res://scripts/menus/file.gd" id="3_xq0xb"]
 [ext_resource type="Script" path="res://scripts/menus/patterns.gd" id="4_ccu3g"]
 [ext_resource type="Script" path="res://scripts/pause_screen.gd" id="5_4ghfj"]
+[ext_resource type="Script" path="res://scripts/menus/styles.gd" id="5_7ecn4"]
 [ext_resource type="Script" path="res://scripts/change_pattern_form.gd" id="5_yr0dy"]
 [ext_resource type="Script" path="res://scripts/siteswap_txt.gd" id="6_brx3t"]
 
@@ -116,7 +117,7 @@ item_0/id = 0
 script = ExtResource("3_xq0xb")
 
 [node name="Patterns" type="PopupMenu" parent="ControlLayer/MenuBackground/MenuBar"]
-size = Vector2i(169, 170)
+size = Vector2i(169, 147)
 item_count = 6
 item_0/text = "Change pattern"
 item_0/checkable = 1
@@ -133,6 +134,18 @@ item_4/id = 3
 item_5/text = "1234567"
 item_5/id = 4
 script = ExtResource("4_ccu3g")
+
+[node name="Styles" type="PopupMenu" parent="ControlLayer/MenuBackground/MenuBar"]
+size = Vector2i(110, 100)
+item_count = 2
+item_0/text = "Normal"
+item_0/checkable = 1
+item_0/checked = true
+item_0/id = 0
+item_1/text = "Reverse"
+item_1/checkable = 1
+item_1/id = 1
+script = ExtResource("5_7ecn4")
 
 [node name="ChangePatternForm" type="VBoxContainer" parent="ControlLayer"]
 visible = false
@@ -186,6 +199,8 @@ script = ExtResource("5_4ghfj")
 [connection signal="change_pattern" from="ControlLayer/MenuBackground/MenuBar/Patterns" to="." method="_on_patterns_change_pattern"]
 [connection signal="change_pattern_toggled" from="ControlLayer/MenuBackground/MenuBar/Patterns" to="ControlLayer/ChangePatternForm" method="_on_patterns_change_pattern_toggled"]
 [connection signal="id_pressed" from="ControlLayer/MenuBackground/MenuBar/Patterns" to="ControlLayer/MenuBackground/MenuBar/Patterns" method="_on_id_pressed"]
+[connection signal="change_style" from="ControlLayer/MenuBackground/MenuBar/Styles" to="." method="_on_styles_change_style"]
+[connection signal="id_pressed" from="ControlLayer/MenuBackground/MenuBar/Styles" to="ControlLayer/MenuBackground/MenuBar/Styles" method="_on_id_pressed"]
 [connection signal="change_pattern" from="ControlLayer/ChangePatternForm" to="." method="_on_patterns_change_pattern"]
 [connection signal="change_pattern" from="ControlLayer/ChangePatternForm" to="ControlLayer/MenuBackground/MenuBar/Patterns" method="_on_change_pattern_form_change_pattern"]
 [connection signal="text_changed" from="ControlLayer/ChangePatternForm/HBox/SiteswapTxt" to="ControlLayer/ChangePatternForm/HBox/SiteswapTxt" method="_on_text_changed"]

@@ -15,11 +15,13 @@ func _ready():
 	env.time_scale = 1.0
 	env.zoom = _control_panel.zoom
 	env.tempo = 0.5
+	env.patterns = [3]
+	env.style = ThrowDefinitions.Default
 
-	_reset_play_field([3])
+	_reset_play_field()
 
 
-func _reset_play_field(patterns: Array):
+func _reset_play_field():
 	if current_play_field != null:
 		current_play_field.queue_free()
 
@@ -28,7 +30,8 @@ func _reset_play_field(patterns: Array):
 	current_play_field.auto_zoomed.connect(_on_play_field_auto_zoomed)
 	add_child(current_play_field)
 
-	current_play_field.set_pattern(patterns)
+	var hands = ThrowDefinitions.Defs[env.style]
+	current_play_field.setup(hands, env.patterns)
 
 
 func _on_play_field_auto_zoomed(zoom: float):
@@ -36,7 +39,8 @@ func _on_play_field_auto_zoomed(zoom: float):
 	
 	
 func _on_patterns_change_pattern(patterns: Array):
-	_reset_play_field(patterns)
+	env.patterns = patterns
+	_reset_play_field()
 
 
 func _on_control_panel_gravity_changed(gravity: float):
@@ -59,5 +63,6 @@ func _on_control_panel_zoom_changed(zoom: float):
 	current_play_field.change_zoom(zoom)
 
 
-func _on_change_pattern_form_change_pattern(patterns: Array):
-	_reset_play_field(patterns)
+func _on_styles_change_style(style):
+	env.style = style
+	_reset_play_field()
