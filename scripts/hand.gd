@@ -51,6 +51,7 @@ func throw(to: Hand, pattern: int):
 	var ball: Ball = Ball.instantiate()
 	ball.position = position
 	ball.gravity_scale = env.gravity_scale
+
 	var diff_pos = to._catch_position(to, base_time) - position;
 	var impulse = Vector2.ZERO
 
@@ -60,6 +61,7 @@ func throw(to: Hand, pattern: int):
 	ball.apply_impulse(impulse)
 	ball.life_time = actual_time - 0.05
 	_play_field.add_child(ball)
+	ball.set_color(pattern)
 
 	var catcher = Catcher.instantiate()
 	catcher.position = Vector2.ZERO
