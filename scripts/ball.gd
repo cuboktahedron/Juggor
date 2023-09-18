@@ -30,5 +30,9 @@ func is_flying() -> bool:
 	return life_time > 0.0
 
 
-func set_color(pattern):
+func set_color_by_pattern(pattern):
 	mesh.modulate = BASE_COLORS[pattern % BASE_COLORS.size()]
+
+
+func set_color(color: Color):
+	mesh.modulate = color

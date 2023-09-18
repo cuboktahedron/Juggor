@@ -11,6 +11,7 @@ var hand_times: Array
 var _phase = 0
 var _time = 0
 var _hand_paths := []
+var _balls := []
 
 @onready var _play_field = get_parent()
 @onready var _hand_positions := [
@@ -48,9 +49,12 @@ func throw(to: Hand, pattern: int):
 
 	var base_time = pattern - 0.5
 	var actual_time = base_time * env.tempo
-	var ball: Ball = Ball.instantiate()
-	ball.position = position
-	ball.gravity_scale = env.gravity_scale
+	if _balls.is_empty():
+		push_warning("[%s] has no ball to throw" % name)
+		return
+
+	var ball: Ball = _balls.pop_front()
+	remove_child(ball)
 
 	var diff_pos = to._catch_position(to, base_time) - position;
 	var impulse = Vector2.ZERO
@@ -58,15 +62,30 @@ func throw(to: Hand, pattern: int):
 	impulse.x = diff_pos.x / actual_time
 	impulse.y = (diff_pos.y - 0.5 * env.gravity * actual_time ** 2) / actual_time
 
-	ball.apply_impulse(impulse)
-	ball.life_time = actual_time - 0.05
 	_play_field.add_child(ball)
-	ball.set_color(pattern)
+	ball.position = position
+	ball.linear_velocity = Vector2.ZERO
+	ball.gravity_scale = env.gravity_scale
+	ball.life_time = actual_time - 0.05
+	ball.freeze = false
+	ball.apply_impulse(impulse)
+	ball.set_color_by_pattern(pattern)
 
 	var catcher = Catcher.instantiate()
 	catcher.position = Vector2.ZERO
 	catcher.ball = ball
+	catcher.hand = to
 	to.add_child(catcher)
+
+
+func add_ball(color: Color, ball_no: int):
+	var ball: Ball = Ball.instantiate()
+	ball.name = "Ball%s" % ball_no
+	ball.position = Vector2.ZERO
+	ball.freeze = true
+	add_child(ball)
+	ball.set_color(color)
+	_balls.push_back(ball)
 
 
 func _catch_position(to: Hand, target_time: float) -> Vector2:
@@ -85,3 +104,11 @@ func _catch_position(to: Hand, target_time: float) -> Vector2:
 	to._hand_positions[work_phase].progress_ratio = cur_progress_ratio
 
 	return pos
+
+
+func catch(ball: Ball):
+	ball.get_parent().remove_child(ball)
+	print("[%s] catched ball(%s)" % [name, ball.name])
+	add_child(ball)
+	ball.position = position
+	_balls.push_back(ball)

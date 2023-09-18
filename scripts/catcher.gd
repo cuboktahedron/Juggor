@@ -1,13 +1,14 @@
 extends Area2D
 
 var ball: Ball
+var hand: Hand
 
 var _is_ball_entered := false
 
 
 func _physics_process(_delta):
 	if _is_ball_entered and !ball.is_flying():
-		ball.queue_free()
+		hand.catch(ball)
 		queue_free()
 	
 

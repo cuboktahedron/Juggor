@@ -45,6 +45,7 @@ func _physics_process(delta):
 func setup(hands: Array, patterns: Array):
 	_setup_hands(hands)
 	_setup_patterns(patterns)
+	_setup_balls(patterns)
 
 
 func change_zoom(zoom: float):
@@ -86,6 +87,62 @@ func _setup_patterns(patterns: Array):
 
 	var zoom = _calculate_zoom(patterns)
 	auto_zoomed.emit(zoom)
+
+
+func _setup_balls(patterns: Array):
+	var rest_ball = _calc_ball_num(patterns)
+	print("rest_ball: %d" % rest_ball)
+	
+	var hand_no = 0
+	var ball_nums := []
+	var ball_no = 0
+	ball_nums.resize(_hands.size())
+	ball_nums.fill(0)
+	
+	var active_balls := []
+	for i in _hands.size():
+		active_balls.push_back([])
+	active_balls = active_balls.map(func(a):
+		a.resize(36)
+		a.fill(0)
+		return a)
+
+	var loop_num := 0
+	while true:
+		loop_num += 1
+		if loop_num == 1000:
+			break
+
+		for pattern in patterns:
+			if rest_ball == 0:
+				return
+			
+			for i in active_balls.size():
+				var ball_num = active_balls[i].pop_front()
+				ball_nums[i] += ball_num
+				active_balls[i].push_back(0)
+			
+			if pattern != 0 and ball_nums[hand_no] == 0:
+				_hands[hand_no].add_ball(
+					Ball.BASE_COLORS[pattern % Ball.BASE_COLORS.size()], ball_no)
+				ball_no += 1
+				rest_ball -= 1
+				if pattern % 2 == 0:
+					active_balls[hand_no][pattern] += 1
+				else:
+					active_balls[(hand_no + 1) % _hands.size()][pattern] += 1
+				
+			hand_no = (hand_no + 1) % _hands.size()
+			
+	if loop_num == 1000:
+		push_error("ball setup is not ended")
+
+
+func _calc_ball_num(patterns):
+	var sum = 0
+	for pattern in patterns:
+		sum += pattern
+	return sum / patterns.size()
 
 
 func _calculate_zoom(patterns: Array):
