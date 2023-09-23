@@ -42,10 +42,14 @@ func _physics_process(delta):
 #		_throw(1, 7)
 
 
-func setup(hands: Array, patterns: Array):
+func setup(hands: Array, env: Dictionary):
+	var patterns = env.patterns
+	var ball_colors = Ball.BASE_COLORS
+	var ball_coloring = env.ball_coloring
+
 	_setup_hands(hands)
 	_setup_patterns(patterns)
-	_setup_balls(patterns)
+	_setup_balls(patterns, ball_colors, ball_coloring)
 
 
 func change_zoom(zoom: float):
@@ -89,7 +93,11 @@ func _setup_patterns(patterns: Array):
 	auto_zoomed.emit(zoom)
 
 
-func _setup_balls(patterns: Array):
+func _setup_balls(
+	patterns: Array,
+	ball_colors: Array,
+	ball_coloring: Core.BallColoring):
+
 	var rest_ball = _calc_ball_num(patterns)
 	print("rest_ball: %d" % rest_ball)
 	
@@ -123,8 +131,16 @@ func _setup_balls(patterns: Array):
 				active_balls[i].push_back(0)
 			
 			if pattern != 0 and ball_nums[hand_no] == 0:
-				_hands[hand_no].add_ball(
-					Ball.BASE_COLORS[pattern % Ball.BASE_COLORS.size()], ball_no)
+				if ball_coloring == Core.BallColoring.BY_BALL_NO:
+					if ball_colors.size() > ball_no:
+						_hands[hand_no].add_ball(ball_colors[ball_no], ball_no)
+					else:
+						_hands[hand_no].add_ball(
+							Ball.BASE_COLORS[pattern % Ball.BASE_COLORS.size()], ball_no)
+				else:
+					_hands[hand_no].add_ball(
+						Ball.BASE_COLORS[pattern % Ball.BASE_COLORS.size()], ball_no)
+
 				ball_no += 1
 				rest_ball -= 1
 				if pattern % 2 == 0:

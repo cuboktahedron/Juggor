@@ -17,6 +17,7 @@ func _ready():
 	env.tempo = 0.5
 	env.patterns = [3]
 	env.style = ThrowDefinitions.Default
+	env.ball_coloring = Core.BallColoring.BY_PATTERN
 
 	_reset_play_field()
 
@@ -31,7 +32,7 @@ func _reset_play_field():
 	add_child(current_play_field)
 
 	var hands = ThrowDefinitions.Defs[env.style]
-	current_play_field.setup(hands, env.patterns)
+	current_play_field.setup(hands, env)
 
 
 func _on_play_field_auto_zoomed(zoom: float):
@@ -65,4 +66,9 @@ func _on_control_panel_zoom_changed(zoom: float):
 
 func _on_styles_change_style(style):
 	env.style = style
+	_reset_play_field()
+
+
+func _on_balls_ball_coloring_changed(coloring):
+	env.ball_coloring = coloring
 	_reset_play_field()

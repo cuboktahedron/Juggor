@@ -69,7 +69,7 @@ func throw(to: Hand, pattern: int):
 	ball.life_time = actual_time - 0.05
 	ball.freeze = false
 	ball.apply_impulse(impulse)
-	ball.set_color_by_pattern(pattern)
+#	ball.set_color_by_pattern(pattern)
 
 	var catcher = Catcher.instantiate()
 	catcher.position = Vector2.ZERO
