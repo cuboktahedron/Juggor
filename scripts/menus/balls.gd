@@ -13,7 +13,6 @@ const MENU_ID_COLORING_BY_BALL_NO = 1001
 
 func _ready():
 	add_submenu_item("Coloring", coloring.name)
-	coloring.coloring_changed.connect(_on_coloring_color_changed)
 
 
 func _on_id_pressed(id):
