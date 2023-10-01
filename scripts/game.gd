@@ -17,6 +17,7 @@ func _ready():
 	env.tempo = 0.5
 	env.patterns = [3]
 	env.style = ThrowDefinitions.Default
+	env.is_fix_size = false
 	env.ball_coloring = Core.BallColoring.BY_PATTERN
 
 	_reset_play_field()
@@ -69,6 +70,11 @@ func _on_styles_change_style(style):
 	_reset_play_field()
 
 
-func _on_balls_ball_coloring_changed(coloring):
+func _on_balls_ball_coloring_changed(coloring: Core.BallColoring):
 	env.ball_coloring = coloring
 	_reset_play_field()
+
+
+func _on_balls_fix_size_changed(is_fix_size: bool):
+	env.is_fix_size = is_fix_size
+	current_play_field.change_zoom(env.zoom)

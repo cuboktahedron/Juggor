@@ -56,6 +56,16 @@ func change_zoom(zoom: float):
 	_camera.zoom = Vector2(1.0, 1.0) * zoom
 	_camera.offset.x = 150 * (1.0 / zoom)
 	_camera.offset.y = -224 * 1.0 / zoom
+	
+	for node in get_children():
+		var ball = node as Ball
+		if ball != null:
+			ball.change_zoom(zoom, env.is_fix_size)
+			continue
+		
+		var hand = node as Hand
+		if hand != null:
+			hand.change_zoom(zoom, env.is_fix_size)
 
 
 func _setup_hands(hands: Array):

@@ -68,8 +68,8 @@ func throw(to: Hand, pattern: int):
 	ball.gravity_scale = env.gravity_scale
 	ball.life_time = actual_time - 0.05
 	ball.freeze = false
+	ball.change_zoom(env.zoom, env.is_fix_size)
 	ball.apply_impulse(impulse)
-#	ball.set_color_by_pattern(pattern)
 
 	var catcher = Catcher.instantiate()
 	catcher.position = Vector2.ZERO
@@ -109,6 +109,16 @@ func _catch_position(to: Hand, target_time: float) -> Vector2:
 func catch(ball: Ball):
 	ball.get_parent().remove_child(ball)
 	print("[%s] catched ball(%s)" % [name, ball.name])
-	add_child(ball)
 	ball.position = position
+	ball.change_zoom(1.0, env.is_fix_size)
+	add_child(ball)
+	
 	_balls.push_back(ball)
+	
+
+func change_zoom(zoom: float, is_fix_size: bool):	
+	if is_fix_size:
+		scale = Vector2(1.0, 1.0) / zoom
+	else:
+		scale = Vector2(1.0, 1.0)
+

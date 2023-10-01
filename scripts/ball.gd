@@ -36,3 +36,10 @@ func set_color_by_pattern(pattern):
 
 func set_color(color: Color):
 	mesh.modulate = color
+
+
+func change_zoom(zoom: float, is_fix_size: bool):
+	if is_fix_size:
+		mesh.scale = Vector2(30, 30) / zoom
+	else:
+		mesh.scale = Vector2(30, 30)
