@@ -41,8 +41,19 @@ func _is_valid_patterns(patterns: Array) -> bool:
 	var sum = 0
 	for pattern in patterns:
 		sum += pattern
-		
-	return sum % patterns.size() == 0
+
+	if sum % patterns.size() != 0:
+		return false
+	
+	var size = patterns.size()
+	for i in range(0, size):
+		for j in  range(i + 1, size):
+			var a = (patterns[i] + i) % size
+			var b = (patterns[j] + j) % size
+			if a == b:
+				return false
+
+	return true
 
 
 func _on_patterns_change_pattern_toggled(is_checked):
