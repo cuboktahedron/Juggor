@@ -43,13 +43,13 @@ func _physics_process(delta):
 
 
 func setup(hands: Array, env: Dictionary):
-	var patterns = env.patterns
+	var sp = env.siteswap_pattern
 	var ball_colors = Ball.BASE_COLORS
 	var ball_coloring = env.ball_coloring
 
 	_setup_hands(hands)
-	_setup_patterns(patterns)
-	_setup_balls(patterns, ball_colors, ball_coloring)
+	_setup_patterns(sp)
+	_setup_balls(sp, ball_colors, ball_coloring)
 
 
 func change_zoom(zoom: float):
@@ -96,19 +96,19 @@ func _setup_hands(hands: Array):
 		add_child(new_hand)
 
 
-func _setup_patterns(patterns: Array):
-	_site_swap.change_patterns(patterns)
+func _setup_patterns(sp: SiteswapPattern):
+	_site_swap.change_patterns(sp)
 
-	var zoom = _calculate_zoom(patterns)
+	var zoom = _calculate_zoom(sp)
 	auto_zoomed.emit(zoom)
 
 
 func _setup_balls(
-	patterns: Array,
+	sp: SiteswapPattern,
 	ball_colors: Array,
 	ball_coloring: Core.BallColoring):
 
-	var rest_ball = _calc_ball_num(patterns)
+	var rest_ball = sp.ball_num()
 	print("rest_ball: %d" % rest_ball)
 	
 	var hand_no = 0
@@ -131,7 +131,7 @@ func _setup_balls(
 		if loop_num == 1000:
 			break
 
-		for pattern in patterns:
+		for pattern in sp.patterns:
 			if rest_ball == 0:
 				return
 			
@@ -140,23 +140,23 @@ func _setup_balls(
 				ball_nums[i] += ball_num
 				active_balls[i].push_back(0)
 			
-			if pattern != 0 and ball_nums[hand_no] == 0:
+			if pattern.height != 0 and ball_nums[hand_no] == 0:
 				if ball_coloring == Core.BallColoring.BY_BALL_NO:
 					if ball_colors.size() > ball_no:
 						_hands[hand_no].add_ball(ball_colors[ball_no], ball_no)
 					else:
 						_hands[hand_no].add_ball(
-							Ball.BASE_COLORS[pattern % Ball.BASE_COLORS.size()], ball_no)
+							Ball.BASE_COLORS[pattern.height % Ball.BASE_COLORS.size()], ball_no)
 				else:
 					_hands[hand_no].add_ball(
-						Ball.BASE_COLORS[pattern % Ball.BASE_COLORS.size()], ball_no)
+						Ball.BASE_COLORS[pattern.height % Ball.BASE_COLORS.size()], ball_no)
 
 				ball_no += 1
 				rest_ball -= 1
-				if pattern % 2 == 0:
-					active_balls[hand_no][pattern] += 1
+				if pattern.height % 2 == 0:
+					active_balls[hand_no][pattern.height] += 1
 				else:
-					active_balls[(hand_no + 1) % _hands.size()][pattern] += 1
+					active_balls[(hand_no + 1) % _hands.size()][pattern.height] += 1
 				
 			hand_no = (hand_no + 1) % _hands.size()
 			
@@ -164,17 +164,10 @@ func _setup_balls(
 		push_error("ball setup is not ended")
 
 
-func _calc_ball_num(patterns):
-	var sum = 0
-	for pattern in patterns:
-		sum += pattern
-	return sum / patterns.size()
-
-
-func _calculate_zoom(patterns: Array):
+func _calculate_zoom(sp: SiteswapPattern):
 	var max_pattern = 0
-	for pattern in patterns:
-		max_pattern = max(max_pattern, pattern)
+	for pattern in sp.patterns:
+		max_pattern = max(max_pattern, pattern.height)
 
 	if max_pattern <= 2:
 		return 1
@@ -197,18 +190,18 @@ func _calculate_zoom(patterns: Array):
 	return zoom
 	
 	
-func _progressed_pattern(hand: int, pattern: int):
+func _progressed_pattern(hand: int, pattern: SiteswapFactor):
 	_throw(hand, pattern)
 
 
-func _throw(hand: int, pattern: int):
+func _throw(hand: int, pattern: SiteswapFactor):
 	if hand == 0:
-		if pattern % 2 == 0:
-			_hands[hand].throw(_hands[0], pattern)
+		if pattern.height % 2 == 0:
+			_hands[hand].throw(_hands[0], pattern.height)
 		else:
-			_hands[hand].throw(_hands[1], pattern)
+			_hands[hand].throw(_hands[1], pattern.height)
 	elif hand == 1:
-		if pattern % 2 == 0:
-			_hands[hand].throw(_hands[1], pattern)
+		if pattern.height % 2 == 0:
+			_hands[hand].throw(_hands[1], pattern.height)
 		else:
-			_hands[hand].throw(_hands[0], pattern)
+			_hands[hand].throw(_hands[0], pattern.height)

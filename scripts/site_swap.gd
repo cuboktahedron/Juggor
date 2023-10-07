@@ -1,6 +1,6 @@
 extends Control
 
-signal progressed(hand: int, pattern: int)
+signal progressed(hand: int, pattern: SiteswapFactor)
 
 var env := {}
 
@@ -32,8 +32,8 @@ func _physics_process(delta):
 	_refresh()
 
 
-func change_patterns(new_patterns: Array) -> bool:
-	_patterns = new_patterns
+func change_patterns(sp: SiteswapPattern) -> bool:
+	_patterns = sp.patterns
 	
 	for child in get_children():
 		child.queue_free();
@@ -41,25 +41,12 @@ func change_patterns(new_patterns: Array) -> bool:
 	for pattern in _patterns:
 		var label = Label.new()
 		label.add_theme_font_size_override("font_size", 32)
-		
-		var pattern_label
-		if pattern <= 9:
-			pattern_label = str(pattern)
-		else:
-			pattern_label = String.chr(pattern - 10 + "A".unicode_at(0))
-		label.text = str(pattern_label)
+		label.text = str(pattern.label())
 		add_child(label)
 
-	_ball_num = _calc_ball_num(_patterns)
+	_ball_num = sp.ball_num()
 
 	return true
-
-
-func _calc_ball_num(patterns):
-	var sum = 0
-	for pattern in patterns:
-		sum += pattern
-	return sum / patterns.size()
 
 
 func _refresh():

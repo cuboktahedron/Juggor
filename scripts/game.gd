@@ -15,7 +15,7 @@ func _ready():
 	env.time_scale = 1.0
 	env.zoom = _control_panel.zoom
 	env.tempo = 0.5
-	env.patterns = [3]
+	env.siteswap_pattern = SiteswapPattern.parse("3")
 	env.style = ThrowDefinitions.Default
 	env.is_fix_size = false
 	env.ball_coloring = Core.BallColoring.BY_PATTERN
@@ -40,8 +40,8 @@ func _on_play_field_auto_zoomed(zoom: float):
 	_control_panel.change_zoom(zoom)
 	
 	
-func _on_patterns_change_pattern(patterns: Array):
-	env.patterns = patterns
+func _on_patterns_change_pattern(sp: SiteswapPattern):
+	env.siteswap_pattern = sp
 	_reset_play_field()
 
 

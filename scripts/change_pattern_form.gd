@@ -1,6 +1,6 @@
 extends VBoxContainer
 
-signal change_pattern(Array)
+signal change_pattern(sp: SiteswapPattern)
 
 @onready var siteswap_txt = $HBox/SiteswapTxt
 @onready var error_message_lbl = $ErrorMessage
@@ -15,45 +15,12 @@ func _on_siteswap_txt_text_submitted(siteswap: String):
 
 
 func _submit(_siteswap: String):
-	var patterns = _split_tokens(siteswap_txt.text)
-	if _is_valid_patterns(patterns):
-		change_pattern.emit(patterns)
+	var sp := SiteswapPattern.parse(_siteswap)
+	if sp.is_valid():
+		change_pattern.emit(sp)
 		_hide_form()
 	else:
 		error_message_lbl.text = "Invalid patterns."
-	
-
-func _split_tokens(siteswap: String) -> Array:
-	var patterns = []
-	for pattern in siteswap.split(""):
-		if "A" <= pattern and pattern <= "Z":
-			patterns.push_back(pattern.unicode_at(0) - "A".unicode_at(0) + 10)
-		else:
-			patterns.push_back(pattern.unicode_at(0) - "0".unicode_at(0))
-	
-	return patterns
-
-
-func _is_valid_patterns(patterns: Array) -> bool:
-	if patterns.is_empty():
-		return false
-	
-	var sum = 0
-	for pattern in patterns:
-		sum += pattern
-
-	if sum % patterns.size() != 0:
-		return false
-	
-	var size = patterns.size()
-	for i in range(0, size):
-		for j in  range(i + 1, size):
-			var a = (patterns[i] + i) % size
-			var b = (patterns[j] + j) % size
-			if a == b:
-				return false
-
-	return true
 
 
 func _on_patterns_change_pattern_toggled(is_checked):
