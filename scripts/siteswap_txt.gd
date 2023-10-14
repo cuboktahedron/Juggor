@@ -11,12 +11,13 @@ func _init():
 
 
 func _on_text_changed(new_text: String):
-	if _allowRegEx.search(new_text) == null:
-		var prev_caret_coumn = caret_column
-		text = _prev_text
-		caret_column = prev_caret_coumn - 1
-	else:
-		var prev_caret_column = caret_column
-		text = new_text.to_upper()
-		caret_column = prev_caret_column
-		_prev_text = text
+	pass
+#	if _allowRegEx.search(new_text) == null:
+#		var prev_caret_coumn = caret_column
+#		text = _prev_text
+#		caret_column = prev_caret_coumn - 1
+#	else:
+#		var prev_caret_column = caret_column
+#		text = new_text.to_upper()
+#		caret_column = prev_caret_column
+#		_prev_text = text

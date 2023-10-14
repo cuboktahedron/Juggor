@@ -165,14 +165,11 @@ func _setup_balls(
 
 
 func _calculate_zoom(sp: SiteswapPattern):
-	var max_pattern = 0
-	for pattern in sp.patterns:
-		max_pattern = max(max_pattern, pattern.height)
-
-	if max_pattern <= 2:
+	var max_height = sp.max_height()
+	if max_height <= 2:
 		return 1
 
-	var base_time = max_pattern - 0.5
+	var base_time = max_height - 0.5
 	var actual_time = base_time * env.tempo
 	var v0 = (-0.5 * env.gravity * actual_time ** 2) / actual_time
 	var t_hmax = -v0 / env.gravity

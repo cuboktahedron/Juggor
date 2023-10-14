@@ -16,7 +16,7 @@ func _on_siteswap_txt_text_submitted(siteswap: String):
 
 func _submit(_siteswap: String):
 	var sp := SiteswapPattern.parse(_siteswap)
-	if sp.is_valid():
+	if sp != null and sp.is_valid():
 		change_pattern.emit(sp)
 		_hide_form()
 	else:

@@ -93,6 +93,80 @@ max_value = 1.0
 step = 0.01
 value = 1.0
 
+[node name="ControlPanel2" type="Panel" parent="ControlLayer"]
+custom_minimum_size = Vector2(300, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 852.0
+offset_top = 32.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3k44b")
+script = ExtResource("2_dytvp")
+
+[node name="Margin" type="MarginContainer" parent="ControlLayer/ControlPanel2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBox" type="VBoxContainer" parent="ControlLayer/ControlPanel2/Margin"]
+layout_mode = 2
+
+[node name="Gravity" type="VBoxContainer" parent="ControlLayer/ControlPanel2/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="ControlLayer/ControlPanel2/Margin/VBox/Gravity"]
+layout_mode = 2
+text = "Gravity: 1"
+
+[node name="HSlider" type="HSlider" parent="ControlLayer/ControlPanel2/Margin/VBox/Gravity"]
+layout_mode = 2
+min_value = 0.25
+max_value = 4.0
+step = 0.25
+value = 1.0
+
+[node name="Time" type="VBoxContainer" parent="ControlLayer/ControlPanel2/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="ControlLayer/ControlPanel2/Margin/VBox/Time"]
+layout_mode = 2
+text = "Time: 1"
+
+[node name="HSlider" type="HSlider" parent="ControlLayer/ControlPanel2/Margin/VBox/Time"]
+layout_mode = 2
+min_value = 0.25
+max_value = 4.0
+step = 0.25
+value = 1.0
+
+[node name="Zoom" type="VBoxContainer" parent="ControlLayer/ControlPanel2/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="ControlLayer/ControlPanel2/Margin/VBox/Zoom"]
+layout_mode = 2
+text = "Zoom: 1"
+
+[node name="HSlider" type="HSlider" parent="ControlLayer/ControlPanel2/Margin/VBox/Zoom"]
+layout_mode = 2
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+value = 1.0
+
 [node name="MenuBackground" type="ColorRect" parent="ControlLayer"]
 anchors_preset = 10
 anchor_right = 1.0
@@ -216,6 +290,12 @@ script = ExtResource("5_4ghfj")
 [connection signal="value_changed" from="ControlLayer/ControlPanel/Margin/VBox/Gravity/HSlider" to="ControlLayer/ControlPanel" method="_on_gravity_changed"]
 [connection signal="value_changed" from="ControlLayer/ControlPanel/Margin/VBox/Time/HSlider" to="ControlLayer/ControlPanel" method="_on_time_changed"]
 [connection signal="value_changed" from="ControlLayer/ControlPanel/Margin/VBox/Zoom/HSlider" to="ControlLayer/ControlPanel" method="_on_zoom_changed"]
+[connection signal="gravity_changed" from="ControlLayer/ControlPanel2" to="." method="_on_control_panel_gravity_changed"]
+[connection signal="time_changed" from="ControlLayer/ControlPanel2" to="." method="_on_control_panel_time_changed"]
+[connection signal="zoom_changed" from="ControlLayer/ControlPanel2" to="." method="_on_control_panel_zoom_changed"]
+[connection signal="value_changed" from="ControlLayer/ControlPanel2/Margin/VBox/Gravity/HSlider" to="ControlLayer/ControlPanel2" method="_on_gravity_changed"]
+[connection signal="value_changed" from="ControlLayer/ControlPanel2/Margin/VBox/Time/HSlider" to="ControlLayer/ControlPanel2" method="_on_time_changed"]
+[connection signal="value_changed" from="ControlLayer/ControlPanel2/Margin/VBox/Zoom/HSlider" to="ControlLayer/ControlPanel2" method="_on_zoom_changed"]
 [connection signal="id_pressed" from="ControlLayer/MenuBackground/MenuBar/File" to="ControlLayer/MenuBackground/MenuBar/File" method="_on_id_pressed"]
 [connection signal="change_pattern" from="ControlLayer/MenuBackground/MenuBar/Patterns" to="." method="_on_patterns_change_pattern"]
 [connection signal="change_pattern_toggled" from="ControlLayer/MenuBackground/MenuBar/Patterns" to="ControlLayer/ChangePatternForm" method="_on_patterns_change_pattern_toggled"]
