@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://cwq32wemcvdfu"]
+
+[ext_resource type="Script" path="res://scripts/Game/JuggleMain.cs" id="1_617m5"]
+[ext_resource type="Script" path="res://scripts/Game/AutoPlayer.cs" id="2_rjbm6"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mxy7e"]
+size = Vector2(2000, 100000)
+
+[node name="Juggle" type="Node"]
+script = ExtResource("1_617m5")
+
+[node name="AutoPlayer" type="Node" parent="."]
+script = ExtResource("2_rjbm6")
+
+[node name="JuggleArea" type="Area2D" parent="."]
+position = Vector2(576, 324)
+collision_layer = 0
+collision_mask = 2
+gravity_space_override = 3
+gravity = 400.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="JuggleArea"]
+shape = SubResource("RectangleShape2D_mxy7e")

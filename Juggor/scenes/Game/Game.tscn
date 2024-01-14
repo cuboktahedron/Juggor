@@ -1,0 +1,50 @@
+[gd_scene load_steps=5 format=3 uid="uid://2dcbtfky2kyp"]
+
+[ext_resource type="Script" path="res://scripts/Game/Game.cs" id="1_7oao4"]
+[ext_resource type="Script" path="res://scripts/Game/Menu/File.cs" id="2_m1lve"]
+[ext_resource type="Script" path="res://scripts/Game/Menu/Environment.cs" id="3_b4r7x"]
+[ext_resource type="Script" path="res://scripts/Game/Menu/Pattern.cs" id="4_hvjl4"]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_7oao4")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Menu" type="MenuBar" parent="CanvasLayer"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 31.0
+grow_horizontal = 2
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Menu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.12549, 0.12549, 0.12549, 1)
+
+[node name="MenuBar" type="HBoxContainer" parent="CanvasLayer/Menu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="File" type="MenuButton" parent="CanvasLayer/Menu/MenuBar"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "File"
+script = ExtResource("2_m1lve")
+
+[node name="Environment" type="MenuButton" parent="CanvasLayer/Menu/MenuBar"]
+layout_mode = 2
+text = "Env"
+script = ExtResource("3_b4r7x")
+
+[node name="Pattern" type="MenuButton" parent="CanvasLayer/Menu/MenuBar"]
+layout_mode = 2
+text = "Pattern"
+script = ExtResource("4_hvjl4")

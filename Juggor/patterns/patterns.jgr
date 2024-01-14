@@ -1,0 +1,50 @@
+%Normal
+{ 13,  0}{  4,  0}
+
+%Reverse
+{  4,  0}{ 13,  0}
+
+%Shower
+{  5,  0}{ 10,  0}
+{ 10,  0}{  5,  0}
+
+%Center
+{ 13,  0}{  0,  0}
+
+%Mills Mess
+{ -1,  0}{-12,  0}
+{  0,  0}{ 12,  0}
+{  1,  0}{-12,  0}
+
+/[ 3-Cascade Step By Step ]
+
+%Normal
+300	1 Ball out of a 3-Cascade
+33022	Throw Twice
+330	2 Balls out of a 3-Cascade
+[32]3322	Throw 3 Times
+3	3-Cascade
+
+/[ 4-Fountain Step By Step ]
+
+%Normal
+40	2 in One Hand
+(4,4)	4-Synchronous Fountain
+4	4-Fountain
+
+/[ Shower ]
+
+%Shower
+51	3-Shower Japanese "OTEDAMA"
+5223	3-Half Shower A
+
+/[ 5-ball Tricks ]
+
+%Reverse
+5	5-Reverse Cascade
+
+/[ Mills Mess ]
+
+%Mills Mess
+330	2 out of the Mills Mess
+3	Standard Mills Mess

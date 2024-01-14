@@ -1,0 +1,22 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build",
+      "type": "dotnet",
+      "task": "build",
+      "problemMatcher": ["$msCompile"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "test-ut",
+      "command": "dotnet",
+      "type": "process",
+      "args": ["test", "Test/UnitTests/UnitTests.csproj"],
+      "problemMatcher": ["$msCompile"]
+    }
+  ]
+}

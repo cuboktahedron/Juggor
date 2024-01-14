@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://56r2mkrukb8g"]
+
+[ext_resource type="Script" path="res://scripts/Game/Ball.cs" id="1_xfogg"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_jj2x7"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_e3gca"]
+radius = 15.0
+
+[node name="Ball" type="RigidBody2D"]
+collision_layer = 2
+collision_mask = 0
+freeze = true
+linear_damp_mode = 1
+angular_damp_mode = 1
+script = ExtResource("1_xfogg")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="."]
+scale = Vector2(30, 30)
+mesh = SubResource("SphereMesh_jj2x7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_e3gca")
