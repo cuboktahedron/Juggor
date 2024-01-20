@@ -14,7 +14,7 @@ public class EnvironmentSettings
 
     public float Gravity => 200 * GravityRate;
 
-    public Vector2 HandMovingScale { get; set; } = new Vector2(15, 15);
+    public Vector2 HandMovingScale { get; set; } = new Vector2(10, 10);
 
     public override string ToString()
     {

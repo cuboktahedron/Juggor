@@ -4,11 +4,25 @@ public partial class HandPath : Path2D
 {
     public PathFollow2D PathFollow { get; init; }
 
-    public HandPath(Vector2 from, Vector2 to)
+    public HandPath(Vector2 from, Vector2 to, HandPathPhase phase)
     {
         Curve = new Curve2D();
-        Curve.AddPoint(from);
-        Curve.AddPoint(to);
+        if (phase == HandPathPhase.Catch)
+        {
+            var yDiff = EnvironmentSettings.Settings.HandMovingScale.Y * 2;
+            var mid = new Vector2((from.X + to.X) / 2f, to.Y + yDiff);
+            Curve.AddPoint(from, null, new Vector2(0, yDiff));
+            Curve.AddPoint(mid);
+            Curve.AddPoint(to, new Vector2(0, yDiff));
+        }
+        else
+        {
+            var yDiff = -EnvironmentSettings.Settings.HandMovingScale.Y * 2;
+            var mid = new Vector2((from.X + to.X) / 2f, to.Y + yDiff);
+            Curve.AddPoint(from, null, new Vector2(0, yDiff));
+            Curve.AddPoint(mid);
+            Curve.AddPoint(to, new Vector2(0, yDiff));
+        }
 
         PathFollow = new PathFollow2D
         {

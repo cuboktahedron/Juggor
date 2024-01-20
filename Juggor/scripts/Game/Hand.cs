@@ -72,10 +72,18 @@ public partial class Hand : Area2D
             handPathVecs.Add(handPathVecs[0]);
         }
 
-        foreach (var (a, b) in handPathVecs.Zip(handPathVecs.Skip(1)))
+        foreach (var ((a, b), i) in handPathVecs.Zip(handPathVecs.Skip(1)).Select((item, i) => (item, i)))
         {
-            var handPath = new HandPath(a, b);
-            handPaths.AddPath(handPath, EnvironmentSettings.Settings.TempoRate);
+            if (i % 2 == 0)
+            {
+                var handPath = new HandPath(a, b, HandPathPhase.Catch);
+                handPaths.AddPath(handPath, EnvironmentSettings.Settings.TempoRate);
+            }
+            else
+            {
+                var handPath = new HandPath(a, b, HandPathPhase.Throw);
+                handPaths.AddPath(handPath, EnvironmentSettings.Settings.TempoRate);
+            }
         }
 
         if (!isRight && !isSynchronous)
