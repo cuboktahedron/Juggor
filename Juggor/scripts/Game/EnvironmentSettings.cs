@@ -16,8 +16,19 @@ public class EnvironmentSettings
 
     public Vector2 HandMovingScale { get; set; } = new Vector2(10, 10);
 
+    public bool IsMirror { get; set; }
+
     public override string ToString()
     {
-        return $"TempoRate={TempoRate}, Tpm={Tpm}, GravityRate={GravityRate}, Gravity={Gravity}";
+        var parameters = new string[]
+        {
+            $"TempoRate={TempoRate}",
+            $"Tpm={Tpm}",
+            $"GravityRate={GravityRate}",
+            $"Gravity={Gravity}",
+            $"IsMirror={IsMirror}"
+        };
+
+        return string.Join(", ", parameters);
     }
 }

@@ -19,17 +19,20 @@ public partial class JuggleMain : Node
     private void ProgressStep(object? sender, StepProgressedEventArgs e)
     {
         var step = e.ThrowingStep;
+
         for (int i = 0; i < step.HandNum; i++)
         {
             foreach (var throwing in step.Hand(i))
             {
+                int handNo = (i + (EnvironmentSettings.Settings.IsMirror ? 1 : 0)) % 2;
+
                 if (throwing.IsCross)
                 {
-                    hands[i].Throw(hands[(i + 1) % 2], throwing.Height);
+                    hands[handNo].Throw(hands[(handNo + 1) % 2], throwing.Height);
                 }
                 else
                 {
-                    hands[i].Throw(hands[i], throwing.Height);
+                    hands[handNo].Throw(hands[handNo], throwing.Height);
                 }
             }
         }
@@ -65,9 +68,10 @@ public partial class JuggleMain : Node
 
         var ballNums = item.Siteswap.BallNumsInHands();
 
-        foreach (var (hand, ballNum) in hands.Zip(ballNums))
+        for (int i = 0; i < hands.Count; i++)
         {
-            hand.InitBalls(ballNum);
+            int handNo = (i + (EnvironmentSettings.Settings.IsMirror ? 1 : 0)) % 2;
+            hands[handNo].InitBalls(ballNums[i]);
         }
 
         var conductor = new SiteswapConductor(item.Siteswap);

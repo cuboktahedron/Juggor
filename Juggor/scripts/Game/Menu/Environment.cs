@@ -9,6 +9,10 @@ public partial class Environment : MenuButton
     [Signal]
     public delegate void OnGravityChangedEventHandler(float gravity);
 
+    [Signal]
+    public delegate void OnMirrorChangedEventHandler(bool isMirror);
+
+    // TODO: Use pascal case
     const int MENU_ID_TEMPO_0_5 = 0;
     const int MENU_ID_TEMPO_1 = 1;
     const int MENU_ID_TEMPO_2 = 2;
@@ -19,9 +23,13 @@ public partial class Environment : MenuButton
     const int MENU_ID_GRAVITY_2 = 12;
     const int MENU_ID_GRAVITY_3 = 13;
 
+    const int MENU_ID_MIRROR = 20;
+
     public override void _Ready()
     {
         var popup = GetPopup();
+
+        // Tempo Menu
         popup.AddSubmenuItem("Tempo", "Tempo");
 
         var tempoMenu = new PopupMenu
@@ -37,6 +45,7 @@ public partial class Environment : MenuButton
 
         tempoMenu.IdPressed += OnItemPressed;
 
+        // Gravity Menu
         popup.AddSubmenuItem("Gravity", "Gravity");
 
         var gravityMenu = new PopupMenu
@@ -51,6 +60,11 @@ public partial class Environment : MenuButton
         popup.AddChild(gravityMenu);
 
         gravityMenu.IdPressed += OnItemPressed;
+
+        // Mirror Menu
+        popup.AddCheckItem("Mirror", MENU_ID_MIRROR);
+
+        popup.IdPressed += OnItemPressed;
     }
 
     private void OnItemPressed(long id)
@@ -86,6 +100,14 @@ public partial class Environment : MenuButton
         else if (id == MENU_ID_GRAVITY_3)
         {
             EmitSignal(SignalName.OnGravityChanged, 3.0);
+        }
+        else if (id == MENU_ID_MIRROR)
+        {
+            var popup = GetPopup();
+            var index = popup.GetItemIndex(MENU_ID_MIRROR);
+            popup.ToggleItemChecked(index);
+            bool isChecked = popup.IsItemChecked(index);
+            EmitSignal(SignalName.OnMirrorChanged, isChecked);
         }
     }
 }

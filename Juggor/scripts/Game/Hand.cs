@@ -36,7 +36,10 @@ public partial class Hand : Area2D
 
         GetParent().AddChild(handPaths);
 
-        int dx = isRight ? 0 : 1;
+        bool isFirst =
+             (EnvironmentSettings.Settings.IsMirror && !isRight)
+          || (!EnvironmentSettings.Settings.IsMirror && isRight);
+        int dx = isFirst ? 0 : 1;
         int sx = isRight ? 1 : -1;
         var handPathVecs = new List<Vector2>();
 
@@ -72,7 +75,8 @@ public partial class Hand : Area2D
             handPathVecs.Add(handPathVecs[0]);
         }
 
-        foreach (var ((a, b), i) in handPathVecs.Zip(handPathVecs.Skip(1)).Select((item, i) => (item, i)))
+        foreach (var ((a, b), i) in
+            handPathVecs.Zip(handPathVecs.Skip(1)).Select((item, i) => (item, i)))
         {
             if (i % 2 == 0)
             {
@@ -86,7 +90,12 @@ public partial class Hand : Area2D
             }
         }
 
-        if (!isRight && !isSynchronous)
+        if (isSynchronous)
+        {
+            return;
+        }
+
+        if (!isFirst)
         {
             handPaths.Slide();
         }

@@ -21,6 +21,7 @@ public partial class Game : Node2D
 
         environment.OnTempoChanged += OnTempoChanged;
         environment.OnGravityChanged += OnGravityChanged;
+        environment.OnMirrorChanged += OnMirrorChanged;
 
         pattern.OnPatternChanged += OnPatternsItemChanged;
 
@@ -47,6 +48,13 @@ public partial class Game : Node2D
     private void OnPatternsItemChanged(object? sender, PatternChangedEventArgs args)
     {
         this.patternsItem = args.Item;
+        ResetJuggleMain();
+    }
+
+    private void OnMirrorChanged(bool isMirror)
+    {
+        EnvironmentSettings.Settings.IsMirror = isMirror;
+
         ResetJuggleMain();
     }
 
