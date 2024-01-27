@@ -4,20 +4,20 @@ namespace Juggor.Game;
 
 public partial class AutoPlayer : Node
 {
-    public event EventHandler<StepProgressedEventArgs>? OnStepProgressed;
-
-    /// <summary>
-    /// Throw count per minute.
-    /// </summary>
-    public float Tpm { get; set; }
-
     private long frame;
 
     private long nextThrowFrame = long.MaxValue;
 
     private SiteswapConductor? conductor;
 
-    public override void _PhysicsProcess(double _delta)
+    public event EventHandler<StepProgressedEventArgs>? OnStepProgressed;
+
+    /// <summary>
+    /// Gets or sets the throw count per minute.
+    /// </summary>
+    public float Tpm { get; set; }
+
+    public override void _PhysicsProcess(double delta)
     {
         if (conductor == null)
         {

@@ -1,5 +1,3 @@
-
-
 namespace Juggor.Game;
 
 public class EnvironmentSettings
@@ -26,7 +24,7 @@ public class EnvironmentSettings
             $"Tpm={Tpm}",
             $"GravityRate={GravityRate}",
             $"Gravity={Gravity}",
-            $"IsMirror={IsMirror}"
+            $"IsMirror={IsMirror}",
         };
 
         return string.Join(", ", parameters);

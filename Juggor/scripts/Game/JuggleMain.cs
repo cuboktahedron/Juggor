@@ -16,28 +16,6 @@ public partial class JuggleMain : Node
         autoPlayer.OnStepProgressed += ProgressStep;
     }
 
-    private void ProgressStep(object? sender, StepProgressedEventArgs e)
-    {
-        var step = e.ThrowingStep;
-
-        for (int i = 0; i < step.HandNum; i++)
-        {
-            foreach (var throwing in step.Hand(i))
-            {
-                int handNo = (i + (EnvironmentSettings.Settings.IsMirror ? 1 : 0)) % 2;
-
-                if (throwing.IsCross)
-                {
-                    hands[handNo].Throw(hands[(handNo + 1) % 2], throwing.Height);
-                }
-                else
-                {
-                    hands[handNo].Throw(hands[handNo], throwing.Height);
-                }
-            }
-        }
-    }
-
     public void Setup()
     {
         var juggleArea = GetNode<Area2D>("JuggleArea");
@@ -53,7 +31,7 @@ public partial class JuggleMain : Node
         for (int handNo = 0; handNo < 2; handNo++)
         {
             var hand = handScene.Instantiate<Hand>();
-            hand.juggleField = this;
+            hand.JuggleField = this;
             hand.Position = handPositions[handNo];
             hand.Name = $"Hand{handNo}";
             hands.Add(hand);
@@ -130,6 +108,28 @@ public partial class JuggleMain : Node
                 case Key.P:
                     hands[1].Throw(hands[0], 0);
                     break;
+            }
+        }
+    }
+
+    private void ProgressStep(object? sender, StepProgressedEventArgs e)
+    {
+        var step = e.ThrowingStep;
+
+        for (int i = 0; i < step.HandNum; i++)
+        {
+            foreach (var throwing in step.Hand(i))
+            {
+                int handNo = (i + (EnvironmentSettings.Settings.IsMirror ? 1 : 0)) % 2;
+
+                if (throwing.IsCross)
+                {
+                    hands[handNo].Throw(hands[(handNo + 1) % 2], throwing.Height);
+                }
+                else
+                {
+                    hands[handNo].Throw(hands[handNo], throwing.Height);
+                }
             }
         }
     }

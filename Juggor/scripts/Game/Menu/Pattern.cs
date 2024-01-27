@@ -5,9 +5,9 @@ namespace Juggor.Game.Menu;
 
 public partial class Pattern : MenuButton
 {
-    public event EventHandler<PatternChangedEventArgs>? OnPatternChanged;
-
     private readonly Dictionary<int, PatternsItem> idToElement = new();
+
+    public event EventHandler<PatternChangedEventArgs>? OnPatternChanged;
 
     public override void _Ready()
     {

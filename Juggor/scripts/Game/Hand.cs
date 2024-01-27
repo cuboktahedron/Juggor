@@ -5,11 +5,13 @@ namespace Juggor.Game;
 
 public partial class Hand : Area2D
 {
-    public JuggleMain? juggleField;
-
     private readonly HashSet<Ball> ballsToCatch = new();
 
     private HandPaths? handPaths;
+
+    private PackedScene ballScene = null!;
+
+    public JuggleMain? JuggleField { get; set; }
 
     public void ChangeThrowStyle(ThrowStyle throwStyle, bool isSynchronous, bool isRight)
     {
@@ -101,8 +103,6 @@ public partial class Hand : Area2D
         }
     }
 
-    private PackedScene ballScene = null!;
-
     public override void _Ready()
     {
         ballScene = GD.Load<PackedScene>("res://scenes/Game/Ball.tscn");
@@ -110,7 +110,7 @@ public partial class Hand : Area2D
 
     public override void _PhysicsProcess(double delta)
     {
-        Debug.Assert(handPaths != null);
+        Debug.Assert(handPaths != null, $"{nameof(handPaths)} is required.");
         Position = handPaths.Next();
     }
 
@@ -125,7 +125,7 @@ public partial class Hand : Area2D
 
     public void Throw(Hand to, int height)
     {
-        Debug.Assert(juggleField != null);
+        Debug.Assert(JuggleField != null, $"{nameof(JuggleField)} is required.");
 
         if (height == 0)
         {
@@ -158,19 +158,28 @@ public partial class Hand : Area2D
         var flyingTime = flyingFrame / 60f;
 
         RemoveChild(ball);
-        juggleField.AddChild(ball);
+        JuggleField.AddChild(ball);
 
         var diffPos = to.CalculateCatchPosition(flyingFrame) - Position;
         var impulse = Vector2.Zero;
 
         float gravity = EnvironmentSettings.Settings.Gravity;
         impulse.X = (float)(diffPos.X / flyingTime);
-        impulse.Y = (float)((diffPos.Y - 0.5 * gravity * flyingTime * flyingTime) / flyingTime);
+        impulse.Y = (float)((diffPos.Y - (0.5 * gravity * flyingTime * flyingTime)) / flyingTime);
 
         ball.Launch(Position, flyingTime, impulse);
         ball.OnReachedToCatch += to.CatchBall;
 
         to.AddBallToCatch(ball);
+    }
+
+    public Vector2 CalculateCatchPosition(long flyingFrame)
+    {
+        Debug.Assert(handPaths != null, $"{nameof(handPaths)} is required.");
+
+        var pos = handPaths.PathPositionAfter(flyingFrame);
+        GD.Print(flyingFrame, pos);
+        return pos;
     }
 
     private void CatchBall(object? sender, EventArgs e)
@@ -180,7 +189,7 @@ public partial class Hand : Area2D
             return;
         }
 
-        juggleField?.RemoveChild(ball);
+        JuggleField?.RemoveChild(ball);
         ball.OnReachedToCatch -= this.CatchBall;
         ball.Reset();
         AddChild(ball);
@@ -189,14 +198,5 @@ public partial class Hand : Area2D
     private void AddBallToCatch(Ball ball)
     {
         ballsToCatch.Add(ball);
-    }
-
-    public Vector2 CalculateCatchPosition(long flyingFrame)
-    {
-        Debug.Assert(handPaths != null);
-
-        var pos = handPaths.PathPositionAfter(flyingFrame);
-        GD.Print(flyingFrame, pos);
-        return pos;
     }
 }

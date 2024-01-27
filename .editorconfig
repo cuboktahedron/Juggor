@@ -19,5 +19,7 @@ dotnet_diagnostic.SA1101.severity = none
 dotnet_diagnostic.SA1200.severity = none
 # ElementsMustBeDocumented
 dotnet_diagnostic.SA1600.severity = none
+# PartialElementsMustBeDocumented
+dotnet_diagnostic.SA1601.severity = none
 # FileMustHaveHeader
 dotnet_diagnostic.SA1633.severity = none

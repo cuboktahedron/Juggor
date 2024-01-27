@@ -1,4 +1,3 @@
-
 namespace Juggor.Game.Menu;
 
 public partial class Environment : MenuButton
@@ -33,7 +32,7 @@ public partial class Environment : MenuButton
 
         var tempoMenu = new PopupMenu
         {
-            Name = "Tempo"
+            Name = "Tempo",
         };
 
         tempoMenu.AddItem("x 0.5", MenuIdTempo050);
@@ -49,7 +48,7 @@ public partial class Environment : MenuButton
 
         var gravityMenu = new PopupMenu
         {
-            Name = "Gravity"
+            Name = "Gravity",
         };
 
         gravityMenu.AddItem("x 0.5", MenuIdGravity050);

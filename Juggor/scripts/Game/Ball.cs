@@ -1,4 +1,3 @@
-
 namespace Juggor.Game;
 
 public partial class Ball : RigidBody2D
@@ -9,6 +8,8 @@ public partial class Ball : RigidBody2D
 
     public bool IsFlying { get; private set; }
 
+    public bool IsCatchable => RestTimeToCatch <= 0f;
+
     public override void _Process(double delta)
     {
         RestTimeToCatch -= delta;
@@ -17,8 +18,6 @@ public partial class Ball : RigidBody2D
             OnReachedToCatch?.Invoke(this, EventArgs.Empty);
         }
     }
-
-    public bool IsCatchable => RestTimeToCatch <= 0f;
 
     public void Launch(Vector2 position, double timeToFly, Vector2 impulse)
     {

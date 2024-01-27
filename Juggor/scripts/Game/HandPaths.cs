@@ -1,13 +1,9 @@
-
-
 namespace Juggor.Game;
 
 public partial class HandPaths : Node2D
 {
-    private int pathCounter = 0;
-
     private readonly List<HandPath> paths = new();
-
+    private int pathCounter = 0;
     private long times;
     private long maxTimes;
 
@@ -43,7 +39,7 @@ public partial class HandPaths : Node2D
     public Vector2 PathPositionAfter(long flyingFrame)
     {
         long tmpTimes = times + flyingFrame;
-        int tmpPathCounter = (int)(pathCounter + tmpTimes / maxTimes) % paths.Count;
+        int tmpPathCounter = (int)(pathCounter + (tmpTimes / maxTimes)) % paths.Count;
         tmpTimes %= maxTimes;
 
         float tmpProgressRatio = paths[tmpPathCounter].ProgressRatio;

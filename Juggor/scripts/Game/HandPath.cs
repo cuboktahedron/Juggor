@@ -2,8 +2,6 @@ namespace Juggor.Game;
 
 public partial class HandPath : Path2D
 {
-    public PathFollow2D PathFollow { get; init; }
-
     public HandPath(Vector2 from, Vector2 to, HandPathPhase phase)
     {
         Curve = new Curve2D();
@@ -31,6 +29,8 @@ public partial class HandPath : Path2D
 
         AddChild(PathFollow);
     }
+
+    public PathFollow2D PathFollow { get; init; }
 
     public float ProgressRatio
     {
