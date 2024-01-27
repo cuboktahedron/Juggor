@@ -2,12 +2,11 @@ namespace Juggor.Core.Siteswap;
 
 public class SiteswapConductor
 {
-    private IReadOnlyList<IReadOnlyList<IReadOnlyList<ThrowingData>>> throwingsss =
+    private readonly Siteswap siteswap;
+    private readonly IReadOnlyList<IReadOnlyList<IReadOnlyList<ThrowingData>>> throwingsss =
         new List<List<List<ThrowingData>>>();
 
-    private readonly Siteswap siteswap;
-
-    public bool IsSynchronous => siteswap.IsSynchronous;
+    private int stepNo = -1;
 
     public SiteswapConductor(Siteswap siteswap)
     {
@@ -21,7 +20,7 @@ public class SiteswapConductor
         throwingsss = siteswap.ToThrowings();
     }
 
-    int stepNo = -1;
+    public bool IsSynchronous => siteswap.IsSynchronous;
 
     public ThrowingStep Next()
     {

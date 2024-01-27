@@ -6,17 +6,19 @@ public class PatternsGroup : IPatternsElement
     private readonly string name;
     private readonly List<IPatternsElement> elements = new();
 
-    public PatternsElementType ElementType => PatternsElementType.Group;
-    public int Id => id;
-    public string Name => name;
-
-    public IReadOnlyList<IPatternsElement> Elements => elements.AsReadOnly();
-
     public PatternsGroup(string name)
     {
         this.id = PatternsIdCounter.Next();
         this.name = name;
     }
+
+    public PatternsElementType ElementType => PatternsElementType.Group;
+
+    public int Id => id;
+
+    public string Name => name;
+
+    public IReadOnlyList<IPatternsElement> Elements => elements.AsReadOnly();
 
     public void Add(IPatternsElement element)
     {

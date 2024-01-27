@@ -31,7 +31,6 @@ public class PatternLoader
         // ; '/' Separator(Green color).
         // ; '%' Name of the style(30 characters or less) with style data,
         // ; or call the registered style.
-
         var group = new PatternsGroup("default");
         ThrowStyle throwStyle = ThrowStyle.Normal;
 
@@ -162,8 +161,8 @@ public class PatternLoader
                 return ProcessResult<ThrowStyle, string>.Error(result.ErrorValue);
             }
 
-            var (CatchPos, ThrowPos) = result.SuccessValue;
-            throwStyle.Add(CatchPos, ThrowPos);
+            var (catchPos, throwPos) = result.SuccessValue;
+            throwStyle.Add(catchPos, throwPos);
         }
 
         lineNumber--;
@@ -216,7 +215,7 @@ public class PatternLoader
 
         if (pos.Count < 2)
         {
-            return new Vector2();
+            return default;
         }
         else
         {

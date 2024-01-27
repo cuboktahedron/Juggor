@@ -1,6 +1,7 @@
 root = true
 
 [*]
+
 charset = utf-8
 end_of_line = lf
 indent_style = space
@@ -8,3 +9,15 @@ insert_final_newline = true
 trim_trailing_whitespace = true
 max_line_length = 120
 indent_size = 4
+
+[*.{cs}]
+
+### StyleCop Ignore ###
+# PrefixLocalCallsWithThis
+dotnet_diagnostic.SA1101.severity = none
+# UsingDirectivesMustBePlacedCorrectly
+dotnet_diagnostic.SA1200.severity = none
+# ElementsMustBeDocumented
+dotnet_diagnostic.SA1600.severity = none
+# FileMustHaveHeader
+dotnet_diagnostic.SA1633.severity = none

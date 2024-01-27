@@ -10,16 +10,6 @@ public class PatternsItem : IPatternsElement
 
     private readonly Siteswap siteswap;
 
-    public PatternsElementType ElementType => PatternsElementType.Item;
-
-    public int Id => id;
-
-    public string Name => name;
-
-    public Siteswap Siteswap => siteswap;
-
-    public ThrowStyle ThrowStyle { get; set; } = ThrowStyle.Normal;
-
     public PatternsItem(string name, Siteswap siteswap)
         : this(name, siteswap, ThrowStyle.Normal)
     {
@@ -32,6 +22,16 @@ public class PatternsItem : IPatternsElement
         this.siteswap = siteswap;
         this.ThrowStyle = throwStyle;
     }
+
+    public ThrowStyle ThrowStyle { get; set; } = ThrowStyle.Normal;
+
+    public PatternsElementType ElementType => PatternsElementType.Item;
+
+    public int Id => id;
+
+    public string Name => name;
+
+    public Siteswap Siteswap => siteswap;
 
     public void Add(IPatternsElement item)
     {

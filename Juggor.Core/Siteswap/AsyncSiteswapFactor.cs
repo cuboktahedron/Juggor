@@ -17,6 +17,23 @@ public class AsyncSiteswapFactor
 
     public bool IsMultiplex => throwings.Count > 1;
 
+    public IReadOnlyList<ThrowingData> ToThrowings()
+    {
+        return throwings;
+    }
+
+    public string RawSiteswap()
+    {
+        if (throwings.Count == 1)
+        {
+            return throwings[0].ToString("async");
+        }
+        else
+        {
+            return $"[{string.Join(string.Empty, throwings.Select(x => x.ToString("async")))}]";
+        }
+    }
+
     internal static bool TryParse(
         SiteswapParseContext context,
         out AsyncSiteswapFactor? factor)
@@ -52,23 +69,6 @@ public class AsyncSiteswapFactor
             {
                 return false;
             }
-        }
-    }
-
-    public IReadOnlyList<ThrowingData> ToThrowings()
-    {
-        return throwings;
-    }
-
-    public string RawSiteswap()
-    {
-        if (throwings.Count == 1)
-        {
-            return throwings[0].ToString("async");
-        }
-        else
-        {
-            return $"[{string.Join("", throwings.Select(x => x.ToString("async")))}]";
         }
     }
 }

@@ -2,15 +2,15 @@ namespace Juggor.Core.Siteswap;
 
 public class ThrowingData
 {
-    public int Height { get; private set; }
-
-    public bool IsCross { get; private set; }
-
     public ThrowingData(int height, bool isCross)
     {
         Height = height;
         IsCross = isCross;
     }
+
+    public int Height { get; private set; }
+
+    public bool IsCross { get; private set; }
 
     public override bool Equals(object? obj)
     {

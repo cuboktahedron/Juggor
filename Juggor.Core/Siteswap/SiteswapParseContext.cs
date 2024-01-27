@@ -8,7 +8,7 @@ public class SiteswapParseContext
 
     public SiteswapParseContext(string pattern)
     {
-        this.pattern = pattern.Replace(" ", "");
+        this.pattern = pattern.Replace(" ", string.Empty);
     }
 
     public char Peek()

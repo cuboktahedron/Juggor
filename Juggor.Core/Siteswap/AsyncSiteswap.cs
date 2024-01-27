@@ -11,30 +11,6 @@ public class AsyncSiteswap : Siteswap
 
     public override bool IsSynchronous => false;
 
-
-    internal static bool TryParse(SiteswapParseContext context, out AsyncSiteswap? siteswap)
-    {
-        siteswap = null;
-
-        var factors = new List<AsyncSiteswapFactor>();
-
-        while (!context.IsEoc())
-        {
-            if (AsyncSiteswapFactor.TryParse(context, out AsyncSiteswapFactor? factor))
-            {
-                factors.Add(factor!);
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        siteswap = new AsyncSiteswap(factors);
-        return true;
-
-    }
-
     public override int BallNum()
     {
         if (!IsValid())
@@ -71,7 +47,7 @@ public class AsyncSiteswap : Siteswap
             var throwings = new List<IReadOnlyList<ThrowingData>>(
                 Enumerable.Repeat(new List<ThrowingData>(), 2))
             {
-                [i % 2] = factor.ToThrowings()
+                [i % 2] = factor.ToThrowings(),
             };
 
             return throwings;
@@ -80,7 +56,7 @@ public class AsyncSiteswap : Siteswap
 
     public override string RawSiteswap()
     {
-        return string.Join("", factors.Select(factor => factor.RawSiteswap()));
+        return string.Join(string.Empty, factors.Select(factor => factor.RawSiteswap()));
     }
 
     public override IReadOnlyList<int> BallNumsInHands()
@@ -98,7 +74,7 @@ public class AsyncSiteswap : Siteswap
         var ballNumInHands = new List<int>() { 0, 0 };
         var activeBallss = new List<List<int>>();
 
-        foreach (var _ in ballNumInHands)
+        foreach (var ballNumInHand in ballNumInHands)
         {
             var activeBalls = new List<int>();
             for (int i = 0; i < maxHeight; i++)
@@ -165,5 +141,27 @@ public class AsyncSiteswap : Siteswap
         }
 
         return initialBallNums;
+    }
+
+    internal static bool TryParse(SiteswapParseContext context, out AsyncSiteswap? siteswap)
+    {
+        siteswap = null;
+
+        var factors = new List<AsyncSiteswapFactor>();
+
+        while (!context.IsEoc())
+        {
+            if (AsyncSiteswapFactor.TryParse(context, out AsyncSiteswapFactor? factor))
+            {
+                factors.Add(factor!);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        siteswap = new AsyncSiteswap(factors);
+        return true;
     }
 }

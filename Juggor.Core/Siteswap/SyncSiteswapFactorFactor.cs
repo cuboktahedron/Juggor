@@ -1,10 +1,14 @@
-
-
 namespace Juggor.Core.Siteswap;
 
 public class SyncSiteswapFactorFactor
 {
     private readonly List<ThrowingData> throwings = new();
+
+    private SyncSiteswapFactorFactor(
+        params ThrowingData[] throwings)
+    {
+        this.throwings = throwings.ToList();
+    }
 
     public ThrowingData Throwing => throwings[0];
 
@@ -12,10 +16,16 @@ public class SyncSiteswapFactorFactor
 
     public IReadOnlyList<ThrowingData> Throwings => throwings;
 
-    private SyncSiteswapFactorFactor(
-        params ThrowingData[] throwings)
+    public string RawSiteswap()
     {
-        this.throwings = throwings.ToList();
+        if (throwings.Count == 1)
+        {
+            return throwings[0].ToString("sync");
+        }
+        else
+        {
+            return $"[{string.Join(string.Empty, throwings.Select(x => x.ToString("sync")))}]";
+        }
     }
 
     internal static bool TryParse(
@@ -75,17 +85,5 @@ public class SyncSiteswapFactorFactor
     internal IReadOnlyList<ThrowingData> ToThrowings()
     {
         return throwings;
-    }
-
-    public string RawSiteswap()
-    {
-        if (throwings.Count == 1)
-        {
-            return throwings[0].ToString("sync");
-        }
-        else
-        {
-            return $"[{string.Join("", throwings.Select(x => x.ToString("sync")))}]";
-        }
     }
 }

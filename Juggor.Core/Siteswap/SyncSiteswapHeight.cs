@@ -18,11 +18,11 @@ public class SyncSiteswapHeight
         char c = context.Peek();
         int tempHeight;
 
-        if ('A' <= c && c <= 'Z')
+        if (c >= 'A' && c <= 'Z')
         {
             tempHeight = c - 'A' + 10;
         }
-        else if ('0' <= c && c <= '9')
+        else if (c >= '0' && c <= '9')
         {
             tempHeight = c - '0';
         }

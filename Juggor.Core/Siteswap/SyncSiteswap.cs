@@ -11,29 +11,6 @@ public class SyncSiteswap : Siteswap
 
     public override bool IsSynchronous => true;
 
-    internal static bool TryParse(SiteswapParseContext context, out SyncSiteswap? siteswap)
-    {
-        siteswap = null;
-
-        var factors = new List<SyncSiteswapFactor>();
-
-        while (!context.IsEoc())
-        {
-            if (SyncSiteswapFactor.TryParse(context, out SyncSiteswapFactor? factor))
-            {
-                factors.Add(factor!);
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        siteswap = new SyncSiteswap(factors);
-        return true;
-
-    }
-
     public override int BallNum()
     {
         if (!IsValid())
@@ -42,7 +19,8 @@ public class SyncSiteswap : Siteswap
         }
 
         var heightss = factors
-            .SelectMany(x => new List<List<int>>() {
+            .SelectMany(x => new List<List<int>>()
+            {
                 x.LeftHand.Throwings.Select(y => y.Height).ToList(),
                 x.RightHand.Throwings.Select(y => y.Height).ToList(),
             }).ToList();
@@ -59,7 +37,8 @@ public class SyncSiteswap : Siteswap
         }
 
         var heightss = factors
-            .SelectMany(x => new List<List<int>>() {
+            .SelectMany(x => new List<List<int>>()
+            {
                 x.LeftHand.Throwings.Select(y => y.IsCross ?
                     y.Height + 1 :
                     y.Height).ToList(),
@@ -86,7 +65,7 @@ public class SyncSiteswap : Siteswap
 
     public override string RawSiteswap()
     {
-        return string.Join("", factors.Select(factor => factor.RawSiteswap()));
+        return string.Join(string.Empty, factors.Select(factor => factor.RawSiteswap()));
     }
 
     public override IReadOnlyList<int> BallNumsInHands()
@@ -103,7 +82,7 @@ public class SyncSiteswap : Siteswap
         var ballNumInHands = new List<int>() { 0, 0 };
         var activeBallss = new List<List<int>>();
 
-        foreach (var _ in ballNumInHands)
+        foreach (var ballNumHand in ballNumInHands)
         {
             var activeBalls = new List<int>();
             for (int i = 0; i < maxHeight; i++)
@@ -175,5 +154,27 @@ public class SyncSiteswap : Siteswap
         }
 
         return initialBallNums;
+    }
+
+    internal static bool TryParse(SiteswapParseContext context, out SyncSiteswap? siteswap)
+    {
+        siteswap = null;
+
+        var factors = new List<SyncSiteswapFactor>();
+
+        while (!context.IsEoc())
+        {
+            if (SyncSiteswapFactor.TryParse(context, out SyncSiteswapFactor? factor))
+            {
+                factors.Add(factor!);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        siteswap = new SyncSiteswap(factors);
+        return true;
     }
 }
