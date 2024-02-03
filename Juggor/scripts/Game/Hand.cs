@@ -1,10 +1,13 @@
 using System.Diagnostics;
 using Juggor.Core.Style;
+using Serilog;
 
 namespace Juggor.Game;
 
 public partial class Hand : Area2D
 {
+    private static readonly ILogger Logger = Log.ForContext<Hand>();
+
     private readonly HashSet<Ball> ballsToCatch = new();
 
     private HandPaths? handPaths;
@@ -143,7 +146,7 @@ public partial class Hand : Area2D
             .FirstOrDefault();
         if (ball == null)
         {
-            GD.PushWarning($"[{Name}] No ball in the hand.");
+            Logger.Warning($"[{Name}] No ball in the hand.");
             return;
         }
 
@@ -178,7 +181,8 @@ public partial class Hand : Area2D
         Debug.Assert(handPaths != null, $"{nameof(handPaths)} is required.");
 
         var pos = handPaths.PathPositionAfter(flyingFrame);
-        GD.Print(flyingFrame, pos);
+        Logger.Verbose($"flyingFrame={flyingFrame}, pos={pos}");
+
         return pos;
     }
 

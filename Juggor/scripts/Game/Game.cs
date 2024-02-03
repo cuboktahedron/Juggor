@@ -4,6 +4,7 @@ using Juggor.Core.Style;
 using Juggor.Game.Menu;
 using Juggor.Serilog;
 using Serilog;
+using Serilog.Events;
 using static Juggor.Game.Menu.Pattern;
 
 namespace Juggor.Game;
@@ -14,10 +15,13 @@ public partial class Game : Node2D
 
     private PatternsItem? patternsItem;
 
-    public override void _Ready()
+    public Game()
     {
         InitLog();
+    }
 
+    public override void _Ready()
+    {
         var menuBar = GetNode("CanvasLayer/Menu/MenuBar");
         var environment = menuBar.GetNode<Menu.Environment>("Environment");
         var pattern = menuBar.GetNode<Pattern>("Pattern");
@@ -36,8 +40,13 @@ public partial class Game : Node2D
 
     private static void InitLog()
     {
+#if DEBUG
+        LoggingLevelSwitches.JuggorLevelSwitch.MinimumLevel = LogEventLevel.Debug;
+        LoggingLevelSwitches.JuggorCoreLevelSwitch.MinimumLevel = LogEventLevel.Debug;
+#endif
         Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Verbose()
+            .MinimumLevel.Override("Juggor", LoggingLevelSwitches.JuggorLevelSwitch)
+            .MinimumLevel.Override("Juggor.Core", LoggingLevelSwitches.JuggorCoreLevelSwitch)
             .WriteTo.Godot()
             .WriteTo.File(
                 "logs/log-.txt",
@@ -45,21 +54,6 @@ public partial class Game : Node2D
                 rollingInterval: RollingInterval.Day,
                 retainedFileCountLimit: 90)
             .CreateLogger();
-
-        Log.Logger.Verbose("verbose");
-        Log.Logger.Debug("debug");
-        Log.Logger.Information("information");
-        Log.Logger.Warning("warning");
-        Log.Logger.Error("error");
-        Log.Logger.Fatal("fatal");
-
-        var e = new Exception();
-        Log.Logger.Verbose(e, "verbose");
-        Log.Logger.Debug(e, "debug");
-        Log.Logger.Information(e, "information");
-        Log.Logger.Warning(e, "warning");
-        Log.Logger.Error(e, "error");
-        Log.Logger.Fatal(e, "fatal");
     }
 
     private void OnTempoChanged(float tempo)

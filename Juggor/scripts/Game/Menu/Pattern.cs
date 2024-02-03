@@ -1,17 +1,21 @@
 using System.Collections.ObjectModel;
 using Juggor.Core.Siteswap.Patterns;
+using Serilog;
 
 namespace Juggor.Game.Menu;
 
 public partial class Pattern : MenuButton
 {
+    private static readonly ILogger Logger = Log.ForContext<Pattern>();
+
     private readonly Dictionary<int, PatternsItem> idToElement = new();
 
     public event EventHandler<PatternChangedEventArgs>? OnPatternChanged;
 
     public override void _Ready()
     {
-        GD.Print("Start loading pattern.jgr");
+        string patternFile = "patterns/patterns.jgr";
+        Logger.Information($"Start loading {patternFile}");
 
         using var fs = new FileStream(
             "patterns/patterns.jgr", FileMode.Open, System.IO.FileAccess.Read);
@@ -27,7 +31,7 @@ public partial class Pattern : MenuButton
         }
         else
         {
-            GD.PushError(result.ErrorValue);
+            Logger.Error(result.ErrorValue);
         }
     }
 

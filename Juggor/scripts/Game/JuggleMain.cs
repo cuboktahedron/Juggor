@@ -1,11 +1,14 @@
 using Juggor.Core.Siteswap;
 using Juggor.Core.Siteswap.Patterns;
+using Serilog;
 using static Juggor.Game.AutoPlayer;
 
 namespace Juggor.Game;
 
 public partial class JuggleMain : Node
 {
+    private static readonly ILogger Logger = Log.ForContext<JuggleMain>();
+
     private readonly List<Hand> hands = new();
 
     private AutoPlayer autoPlayer = null!;
@@ -41,8 +44,8 @@ public partial class JuggleMain : Node
 
     public void Start(PatternsItem item)
     {
-        GD.Print(EnvironmentSettings.Settings);
-        GD.Print(item);
+        Logger.Information(EnvironmentSettings.Settings.ToString());
+        Logger.Information(item.ToString());
 
         var ballNums = item.Siteswap.BallNumsInHands();
 
