@@ -4,34 +4,42 @@ namespace Juggor.Core.Siteswap.Patterns;
 
 public class PatternsItem : IPatternsElement
 {
-    private readonly int id;
-
-    private readonly string name;
-
-    private readonly Siteswap siteswap;
-
     public PatternsItem(string name, Siteswap siteswap)
-        : this(name, siteswap, ThrowStyle.Normal)
+        : this(
+            name,
+            siteswap,
+            ThrowStyle.Normal,
+            new JuggleParameter())
     {
     }
 
-    public PatternsItem(string name, Siteswap siteswap, ThrowStyle throwStyle)
+    public PatternsItem(
+        string name,
+        Siteswap siteswap,
+        ThrowStyle throwStyle,
+        JuggleParameter juggleParameter)
     {
-        this.id = PatternsIdCounter.Next();
-        this.name = name;
-        this.siteswap = siteswap;
-        this.ThrowStyle = throwStyle;
+        Id = PatternsIdCounter.Next();
+        Name = name;
+        Siteswap = siteswap;
+        ThrowStyle = throwStyle;
+        TempoRate = juggleParameter.TempoRate;
+        GravityRate = juggleParameter.GravityRate;
     }
 
     public ThrowStyle ThrowStyle { get; set; } = ThrowStyle.Normal;
 
     public PatternsElementType ElementType => PatternsElementType.Item;
 
-    public int Id => id;
+    public int Id { get; init; }
 
-    public string Name => name;
+    public string Name { get; init; }
 
-    public Siteswap Siteswap => siteswap;
+    public Siteswap Siteswap { get; init; }
+
+    public float TempoRate { get; init; }
+
+    public float GravityRate { get; init; }
 
     public void Add(IPatternsElement item)
     {
@@ -40,6 +48,15 @@ public class PatternsItem : IPatternsElement
 
     public override string ToString()
     {
-        return $"Name={name}, siteswap={siteswap.RawSiteswap()}, style=({ThrowStyle})";
+        var ss = new string[]
+        {
+            $"Name={Name}",
+            $"siteswap={Siteswap.RawSiteswap()}",
+            $"style=({ThrowStyle})",
+            $"tempoRate={TempoRate}",
+            $"gravityRate={GravityRate}",
+        };
+
+        return string.Join(", ", ss);
     }
 }

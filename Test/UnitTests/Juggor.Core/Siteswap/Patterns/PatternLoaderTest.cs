@@ -24,6 +24,9 @@ public class SiteswapConductorTest
 
 /[ 4-ball ]
 
+#GA=98
+#SP=3.0
+
 %Reverse
 4 fountain
 71 shower";
@@ -48,21 +51,29 @@ public class SiteswapConductorTest
             .Be($"Name=Normal, ThrowCatchPoints={{13, 0}}{{4, 0}}");
         (group3Ball!.Elements[0] as PatternsItem)!.Name.Should().Be("3-Cascade");
         (group3Ball!.Elements[0] as PatternsItem)!.Siteswap.RawSiteswap().Should().Be("3");
+        (group3Ball!.Elements[0] as PatternsItem)!.TempoRate.Should().Be(1.0f);
+        (group3Ball!.Elements[0] as PatternsItem)!.GravityRate.Should().Be(1.0f);
         (group3Ball!.Elements[1] as PatternsItem)!.ThrowStyle.Name.Should().Be("Normal");
         (group3Ball!.Elements[1] as PatternsItem)!.Name.Should().Be("3 shower");
         (group3Ball!.Elements[1] as PatternsItem)!.Siteswap.RawSiteswap().Should().Be("51");
+        (group3Ball!.Elements[1] as PatternsItem)!.TempoRate.Should().Be(1.0f);
+        (group3Ball!.Elements[1] as PatternsItem)!.GravityRate.Should().Be(1.0f);
 
         var group4Ball = patternsElements[1] as PatternsGroup;
         group4Ball!.Name.Should().Be("4-ball");
         (group4Ball!.Elements[0] as PatternsItem)!.ThrowStyle.Name.Should().Be("Reverse");
         (group4Ball!.Elements[0] as PatternsItem)!.Name.Should().Be("fountain");
         (group4Ball!.Elements[0] as PatternsItem)!.Siteswap.RawSiteswap().Should().Be("4");
+        (group4Ball!.Elements[0] as PatternsItem)!.TempoRate.Should().Be(3.0f);
+        (group4Ball!.Elements[0] as PatternsItem)!.GravityRate.Should().Be(10.0f);
         (group4Ball!.Elements[1] as PatternsItem)!.ThrowStyle
             .ToString()
             .Should()
             .Be($"Name=Reverse, ThrowCatchPoints={{4, 0}}{{13, 0}}");
         (group4Ball!.Elements[1] as PatternsItem)!.Name.Should().Be("shower");
         (group4Ball!.Elements[1] as PatternsItem)!.Siteswap.RawSiteswap().Should().Be("71");
+        (group4Ball!.Elements[1] as PatternsItem)!.TempoRate.Should().Be(3.0f);
+        (group4Ball!.Elements[1] as PatternsItem)!.GravityRate.Should().Be(10.0f);
     }
 
     [Fact]

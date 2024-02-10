@@ -157,7 +157,7 @@ public partial class Hand : Area2D
         }
 
         float fHeight = height;
-        var flyingFrame = (long)((fHeight - adjuster) * 60f / EnvironmentSettings.Settings.TempoRate);
+        var flyingFrame = (long)((fHeight - adjuster) * 60f * (60f / EnvironmentSettings.Settings.Tpm));
         var flyingTime = flyingFrame / 60f;
 
         RemoveChild(ball);

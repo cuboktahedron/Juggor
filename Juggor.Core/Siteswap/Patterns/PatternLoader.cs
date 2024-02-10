@@ -6,12 +6,13 @@ namespace Juggor.Core.Siteswap.Patterns;
 
 public class PatternLoader
 {
+    private readonly Dictionary<string, ThrowStyle> styles = new();
     private int lineNumber = 0;
-    private Dictionary<string, ThrowStyle> styles = new();
 
     public ProcessResult<IList<IPatternsElement>, string> Load(StreamReader sr)
     {
         var patterns = new List<IPatternsElement>();
+        var juggleParameter = new JuggleParameter();
 
         var lines = sr.ReadToEnd().Replace("\r\n", "\n").Replace("\r", "\n").Split("\n");
         lines = lines.Select(line =>
@@ -63,6 +64,14 @@ public class PatternLoader
 
                 group = new PatternsGroup(line);
             }
+            else if (line[0] == '#')
+            {
+                var result = LoadJuggleParameter(line[1..], ref juggleParameter);
+                if (!result.IsSucceeded)
+                {
+                    return ProcessResult<IList<IPatternsElement>, string>.Error(result.ErrorValue);
+                }
+            }
             else if (line[0] == '%')
             {
                 var result = LoadThrowStyle(lines);
@@ -92,15 +101,15 @@ public class PatternLoader
                     if (!ss!.IsValid())
                     {
                         return ProcessResult<IList<IPatternsElement>, string>.Error(
-                            $"L{lineNumber}: \"{itemElements[0]}\" is not jugglable.");
+                            LineMessage($"\"{itemElements[0]}\" is not jugglable."));
                     }
 
-                    group.Add(new PatternsItem(label, ss, throwStyle));
+                    group.Add(new PatternsItem(label, ss, throwStyle, juggleParameter));
                 }
                 else
                 {
                     return ProcessResult<IList<IPatternsElement>, string>.Error(
-                        $"L{lineNumber}: \"{itemElements[0]}\" is invalid.");
+                        LineMessage($"\"{itemElements[0]}\" is invalid."));
                 }
             }
         }
@@ -113,6 +122,45 @@ public class PatternLoader
         return ProcessResult<IList<IPatternsElement>, string>.Success(patterns);
     }
 
+    private ProcessVoidResult<string> LoadJuggleParameter(string line, ref JuggleParameter juggleParameter)
+    {
+        string[] elems = line.Split('=', 2, StringSplitOptions.TrimEntries);
+        if (elems.Length != 2)
+        {
+            return ProcessVoidResult<string>.Error(
+                LineMessage($"JuggleParameter must be set in the form Name=Value."));
+        }
+
+        if (elems[0] == "GA")
+        {
+            if (float.TryParse(elems[1], out float ga))
+            {
+                ga = Math.Min(98f, Math.Max(0.1f, ga));
+                juggleParameter.GravityRate = ga / 9.8f;
+            }
+            else
+            {
+                return ProcessVoidResult<string>.Error(
+                    LineMessage($"L{lineNumber}: \"GA\" parameter must be a number"));
+            }
+        }
+        else if (elems[0] == "SP")
+        {
+            if (float.TryParse(elems[1], out float sp))
+            {
+                sp = Math.Min(3.0f, Math.Max(0.1f, sp));
+                juggleParameter.TempoRate = sp;
+            }
+            else
+            {
+                return ProcessVoidResult<string>.Error(
+                    LineMessage($"\"SP\" parameter must be a number"));
+            }
+        }
+
+        return ProcessVoidResult<string>.Success();
+    }
+
     private ProcessResult<ThrowStyle, string> LoadThrowStyle(string[] lines)
     {
         string line = lines[lineNumber - 1];
@@ -121,7 +169,7 @@ public class PatternLoader
         if (string.IsNullOrEmpty(styleName))
         {
             return ProcessResult<ThrowStyle, string>.Error(
-                $"L{lineNumber}: Style name is required.");
+                LineMessage($"Style name is required."));
         }
 
         if (styles.TryGetValue(styleName, out ThrowStyle? throwStyle))
@@ -151,7 +199,7 @@ public class PatternLoader
                 else
                 {
                     return ProcessResult<ThrowStyle, string>.Error(
-                        $"L{lineNumber}: At least one catch/throw position is required.");
+                        LineMessage($"At least one catch/throw position is required."));
                 }
             }
 
@@ -178,7 +226,7 @@ public class PatternLoader
         if (p1 == -1 || p2 == -1)
         {
             return ProcessResult<(Vector2, Vector2), string>.Error(
-                $"L{lineNumber}: Catch position is invalid.");
+                LineMessage($"Catch position is invalid."));
         }
 
         Vector2 catchPos = LoadPosition(line[(p1 + 1)..p2]);
@@ -190,7 +238,7 @@ public class PatternLoader
         if (p1 == -1 || p2 == -1)
         {
             return ProcessResult<(Vector2, Vector2), string>.Error(
-                $"L{lineNumber}: Throw position is invalid.");
+                LineMessage($"Throw position is invalid."));
         }
 
         Vector2 throwPos = LoadPosition(line[(p1 + 1)..p2]);
@@ -221,5 +269,10 @@ public class PatternLoader
         {
             return new Vector2(pos[0], pos[1]);
         }
+    }
+
+    private string LineMessage(string message)
+    {
+        return $"L{lineNumber}: {message}";
     }
 }

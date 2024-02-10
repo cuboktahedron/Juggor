@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Juggor.Core.Siteswap;
 using Juggor.Core.Siteswap.Patterns;
 using Juggor.Core.Style;
@@ -15,6 +16,8 @@ public partial class Game : Node2D
 
     private PatternsItem? patternsItem;
 
+    private Juggor.Game.Menu.Environment? environmentMenu;
+
     public Game()
     {
         InitLog();
@@ -23,17 +26,17 @@ public partial class Game : Node2D
     public override void _Ready()
     {
         var menuBar = GetNode("CanvasLayer/Menu/MenuBar");
-        var environment = menuBar.GetNode<Menu.Environment>("Environment");
         var pattern = menuBar.GetNode<Pattern>("Pattern");
-
-        environment.OnTempoChanged += OnTempoChanged;
-        environment.OnGravityChanged += OnGravityChanged;
-        environment.OnMirrorChanged += OnMirrorChanged;
+        environmentMenu = menuBar.GetNode<Menu.Environment>("Environment");
 
         pattern.OnPatternChanged += OnPatternsItemChanged;
 
+        environmentMenu.OnTempoChanged += OnTempoChanged;
+        environmentMenu.OnGravityChanged += OnGravityChanged;
+        environmentMenu.OnMirrorChanged += OnMirrorChanged;
+
         Siteswap.TryParse(new SiteswapParseContext("3"), out Siteswap? siteswap);
-        patternsItem = new PatternsItem("3 ball cascade", siteswap!, ThrowStyle.Normal);
+        patternsItem = new PatternsItem("3 ball cascade", siteswap!);
 
         ResetJuggleMain();
     }
@@ -72,6 +75,14 @@ public partial class Game : Node2D
 
     private void OnPatternsItemChanged(object? sender, PatternChangedEventArgs args)
     {
+        Debug.Assert(environmentMenu != null, $"{nameof(environmentMenu)} is required.");
+
+        PatternsItem item = args.Item;
+        environmentMenu.ChangePatternItem(item);
+
+        EnvironmentSettings.Settings.TempoRate = item.TempoRate;
+        EnvironmentSettings.Settings.GravityRate = item.GravityRate;
+
         this.patternsItem = args.Item;
         ResetJuggleMain();
     }

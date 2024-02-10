@@ -1,3 +1,5 @@
+using Juggor.Core.Siteswap.Patterns;
+
 namespace Juggor.Game.Menu;
 
 public partial class Environment : MenuButton
@@ -14,6 +16,10 @@ public partial class Environment : MenuButton
 
     private const int MenuIdMirror = 20;
 
+    private int tempoRate = 100;
+
+    private int gravityRate = 100;
+
     [Signal]
     public delegate void OnTempoChangedEventHandler(float tempo);
 
@@ -22,6 +28,34 @@ public partial class Environment : MenuButton
 
     [Signal]
     public delegate void OnMirrorChangedEventHandler(bool isMirror);
+
+    private float TempoRate
+    {
+        get => tempoRate / 100f;
+        set
+        {
+            if (value < 0.1f || value > 3.0f)
+            {
+                throw new ArgumentException("TempoRate must be between 0.1 and 3.0", nameof(value));
+            }
+
+            tempoRate = (int)value * 100;
+        }
+    }
+
+    private float GravityRate
+    {
+        get => gravityRate / 100f;
+        set
+        {
+            if (value < 0.1f || value > 98f)
+            {
+                throw new ArgumentException("GravityRate must be between 0.1 and 10.0", nameof(value));
+            }
+
+            gravityRate = (int)value * 100;
+        }
+    }
 
     public override void _Ready()
     {
@@ -63,6 +97,12 @@ public partial class Environment : MenuButton
         popup.AddCheckItem("Mirror", MenuIdMirror);
 
         popup.IdPressed += OnItemPressed;
+    }
+
+    public void ChangePatternItem(PatternsItem item)
+    {
+        TempoRate = item.TempoRate;
+        GravityRate = item.GravityRate;
     }
 
     private void OnItemPressed(long id)

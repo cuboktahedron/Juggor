@@ -12,7 +12,7 @@ public partial class HandPaths : Node2D
         paths.Add(handPath);
         AddChild(handPath);
 
-        maxTimes = (long)(60f / tempoRate);
+        maxTimes = (long)(60f * (60f / EnvironmentSettings.Settings.Tpm));
     }
 
     public Vector2 Next()

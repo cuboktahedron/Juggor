@@ -2,17 +2,17 @@ namespace Juggor.Core.Process;
 
 public class ProcessResult<TSuccess, TError>
 {
-    private TSuccess? successValue;
-    private TError? errorValue;
-    private bool isSucceeded;
+    private readonly TSuccess? successValue;
+    private readonly TError? errorValue;
+    private readonly bool isSucceeded;
 
-    public ProcessResult(TSuccess? successValue)
+    private ProcessResult(TSuccess? successValue)
     {
         this.successValue = successValue;
         this.isSucceeded = true;
     }
 
-    public ProcessResult(TError? errorValue)
+    private ProcessResult(TError? errorValue)
     {
         this.errorValue = errorValue;
     }

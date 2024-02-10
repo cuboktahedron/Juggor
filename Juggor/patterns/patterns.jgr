@@ -16,6 +16,9 @@
 {  0,  0}{ 12,  0}
 {  1,  0}{-12,  0}
 
+#GA=9.8
+#SP=1.0
+
 /[ 3-Cascade Step By Step ]
 
 %Normal

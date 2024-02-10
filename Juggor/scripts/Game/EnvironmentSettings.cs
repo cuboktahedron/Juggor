@@ -6,11 +6,11 @@ public class EnvironmentSettings
 
     public float TempoRate { get; set; } = 1.0f;
 
-    public float Tpm => 60 * TempoRate;
+    public float Tpm => 120 * TempoRate;
 
     public float GravityRate { get; set; } = 1.0f;
 
-    public float Gravity => 200 * GravityRate;
+    public float Gravity => 980 * GravityRate;
 
     public Vector2 HandMovingScale { get; set; } = new Vector2(10, 10);
 
