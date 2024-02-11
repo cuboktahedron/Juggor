@@ -64,57 +64,6 @@ public partial class JuggleMain : Node
         }
     }
 
-    public override void _UnhandledInput(InputEvent ev)
-    {
-        if (ev is InputEventKey eventKey)
-        {
-            if (!eventKey.IsPressed())
-            {
-                return;
-            }
-
-            switch (eventKey.Keycode)
-            {
-                case Key.Key0:
-                    hands[0].Throw(hands[0], 0);
-                    break;
-                case Key.Key1:
-                    hands[0].Throw(hands[1], 1);
-                    break;
-                case Key.Key2:
-                    hands[0].Throw(hands[0], 2);
-                    break;
-                case Key.Key3:
-                    hands[0].Throw(hands[1], 3);
-                    break;
-                case Key.Key4:
-                    hands[0].Throw(hands[0], 4);
-                    break;
-                case Key.Key5:
-                    hands[0].Throw(hands[1], 5);
-                    break;
-                case Key.Q:
-                    hands[1].Throw(hands[0], 1);
-                    break;
-                case Key.W:
-                    hands[1].Throw(hands[0], 2);
-                    break;
-                case Key.E:
-                    hands[1].Throw(hands[1], 3);
-                    break;
-                case Key.R:
-                    hands[1].Throw(hands[0], 4);
-                    break;
-                case Key.T:
-                    hands[1].Throw(hands[1], 5);
-                    break;
-                case Key.P:
-                    hands[1].Throw(hands[0], 0);
-                    break;
-            }
-        }
-    }
-
     private void ProgressStep(object? sender, StepProgressedEventArgs e)
     {
         var step = e.ThrowingStep;

@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://2dcbtfky2kyp"]
+[gd_scene load_steps=6 format=3 uid="uid://2dcbtfky2kyp"]
 
 [ext_resource type="Script" path="res://scripts/Game/Game.cs" id="1_7oao4"]
 [ext_resource type="Script" path="res://scripts/Game/Menu/File.cs" id="2_m1lve"]
 [ext_resource type="Script" path="res://scripts/Game/Menu/Environment.cs" id="3_b4r7x"]
 [ext_resource type="Script" path="res://scripts/Game/Menu/Pattern.cs" id="4_hvjl4"]
+[ext_resource type="Script" path="res://scripts/Game/PauseScreen.cs" id="5_8g7sm"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_7oao4")
@@ -11,6 +12,7 @@ script = ExtResource("1_7oao4")
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Menu" type="MenuBar" parent="CanvasLayer"]
+process_mode = 3
 anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 31.0
@@ -48,3 +50,8 @@ script = ExtResource("3_b4r7x")
 layout_mode = 2
 text = "Pattern"
 script = ExtResource("4_hvjl4")
+
+[node name="PauseScreen" type="Node2D" parent="."]
+process_mode = 3
+visible = false
+script = ExtResource("5_8g7sm")
