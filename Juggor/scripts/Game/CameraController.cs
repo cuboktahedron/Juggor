@@ -8,7 +8,7 @@ public partial class CameraController : Node2D
 
     private bool isPanning;
 
-    private Godot.Vector2? prevMousePosition;
+    private Vector2? prevMousePosition;
 
     private Camera2D camera = null!;
 
@@ -53,9 +53,23 @@ public partial class CameraController : Node2D
                 prevMousePosition = mouse.Position;
             }
         }
+        else if (ev is InputEventKey key)
+        {
+            if (key.IsActionPressed(InputMap.HomeView))
+            {
+                RevertToHomeView();
+            }
+        }
     }
 
-    private void DoPan(Godot.Vector2 deltaPosition)
+    private void RevertToHomeView()
+    {
+        zoomPermil = 1000;
+        camera.Zoom = new Vector2(1, 1);
+        Position = Vector2.Zero;
+    }
+
+    private void DoPan(Vector2 deltaPosition)
     {
         Position -= deltaPosition / ZoomMagnification;
     }
