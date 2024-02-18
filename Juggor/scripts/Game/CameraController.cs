@@ -14,6 +14,9 @@ public partial class CameraController : Node2D
 
     private long zoomPermil = 1000;
 
+    [Signal]
+    public delegate void OnReverTotHomeViewEventHandler();
+
     private float ZoomMagnification => zoomPermil / 1000f;
 
     public override void _Ready()
@@ -62,11 +65,24 @@ public partial class CameraController : Node2D
         }
     }
 
+    public void AdjustCamera(Vector2 yRange)
+    {
+        Vector2 windowSize = (Vector2)GetViewport().GetWindow().Size;
+        long marginTop = 60;
+        long viewHeight = (long)windowSize.Y - marginTop;
+
+        long newZoomPermil = (long)(viewHeight / yRange.Y * 1000);
+        Logger.Debug($"newZoomPermil={newZoomPermil}");
+        Zoom(Vector2.Zero, newZoomPermil);
+
+        Vector2 viewSize = windowSize / ZoomMagnification;
+        Position = new Vector2((windowSize.X - viewSize.X) / 2, windowSize.Y - viewSize.Y);
+        Logger.Debug($"CameraPosition={Position}");
+    }
+
     private void RevertToHomeView()
     {
-        zoomPermil = 1000;
-        camera.Zoom = new Vector2(1, 1);
-        Position = Vector2.Zero;
+        EmitSignal(SignalName.OnReverTotHomeView);
     }
 
     private void DoPan(Vector2 deltaPosition)
@@ -76,26 +92,21 @@ public partial class CameraController : Node2D
 
     private void ZoomIn(Vector2 zoomPosition)
     {
-        Vector2 windowSize = (Vector2)GetViewport().GetWindow().Size;
-        Vector2 ratio = zoomPosition / windowSize;
-        float beforeZoomMagnification = ZoomMagnification;
-
-        zoomPermil = Math.Min(zoomPermil + 200, 10000);
-        camera.Zoom = new Vector2(1, 1) * ZoomMagnification;
-
-        Vector2 viewSize = windowSize / ZoomMagnification;
-        Vector2 nextCameraPosition = Position + (zoomPosition / beforeZoomMagnification);
-        nextCameraPosition -= viewSize * ratio;
-        Position = nextCameraPosition;
+        Zoom(zoomPosition, zoomPermil + 200);
     }
 
     private void ZoomOut(Vector2 zoomPosition)
     {
+        Zoom(zoomPosition, zoomPermil - 200);
+    }
+
+    private void Zoom(Vector2 zoomPosition, long newZoomPermil)
+    {
         Vector2 windowSize = (Vector2)GetViewport().GetWindow().Size;
         Vector2 ratio = zoomPosition / windowSize;
-        float beforeZoomMagnification = zoomPermil / 1000f;
+        float beforeZoomMagnification = ZoomMagnification;
 
-        zoomPermil = Math.Max(zoomPermil - 200, 200);
+        zoomPermil = Math.Max(Math.Min(newZoomPermil, 1000), 1);
         camera.Zoom = new Vector2(1, 1) * ZoomMagnification;
 
         Vector2 viewSize = windowSize / ZoomMagnification;

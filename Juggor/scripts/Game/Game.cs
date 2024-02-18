@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using Juggor.Core.Siteswap;
 using Juggor.Core.Siteswap.Patterns;
-using Juggor.Core.Style;
 using Juggor.Game.Menu;
 using Juggor.Serilog;
 using Serilog;
@@ -16,7 +15,9 @@ public partial class Game : Node2D
 
     private PatternsItem? patternsItem;
 
-    private Juggor.Game.Menu.Environment? environmentMenu;
+    private Menu.Environment? environmentMenu;
+
+    private CameraController? cameraController;
 
     public Game()
     {
@@ -37,6 +38,8 @@ public partial class Game : Node2D
 
         Siteswap.TryParse(new SiteswapParseContext("3"), out Siteswap? siteswap);
         patternsItem = new PatternsItem("3 ball cascade", siteswap!);
+
+        cameraController = GetNode<CameraController>("CameraController");
 
         ResetJuggleMain();
     }
@@ -96,6 +99,9 @@ public partial class Game : Node2D
 
     private void ResetJuggleMain()
     {
+        Debug.Assert(cameraController != null, $"{nameof(cameraController)} is required.");
+        Debug.Assert(patternsItem != null, $"{nameof(patternsItem)} is required.");
+
         if (juggleMain != null)
         {
             RemoveChild(juggleMain);
@@ -105,7 +111,7 @@ public partial class Game : Node2D
         juggleMain = juggle.Instantiate<JuggleMain>();
         AddChild(juggleMain);
 
-        juggleMain.Setup();
-        juggleMain.Start(patternsItem!);
+        juggleMain.Setup(cameraController, patternsItem!);
+        juggleMain.Start();
     }
 }
