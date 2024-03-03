@@ -22,10 +22,10 @@ public partial class Hand : Area2D
             .Select(tcPoint => new ThrowCatchPoint(
                 new System.Numerics.Vector2(
                     tcPoint.CatchPt.X * EnvironmentSettings.Settings.HandMovingScale.X,
-                    tcPoint.CatchPt.Y * EnvironmentSettings.Settings.HandMovingScale.Y),
+                    tcPoint.CatchPt.Y * -EnvironmentSettings.Settings.HandMovingScale.Y),
                 new System.Numerics.Vector2(
                     tcPoint.ThrowPt.X * EnvironmentSettings.Settings.HandMovingScale.X,
-                    tcPoint.ThrowPt.Y * EnvironmentSettings.Settings.HandMovingScale.Y)))
+                    tcPoint.ThrowPt.Y * -EnvironmentSettings.Settings.HandMovingScale.Y)))
             .ToList();
 
         if (!tcPoints.Any())

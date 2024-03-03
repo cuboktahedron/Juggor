@@ -97,7 +97,7 @@ public partial class JuggleMain : Node
         float timeHMax = (maxThrowHeight - 1f) / 2f / EnvironmentSettings.Settings.TempoRate / 2f;
         int maxHandYMax = (int)patternsItem.ThrowStyle.ThrowCatchPoints
             .Max(x => Math.Max(x.CatchPt.Y, x.ThrowPt.Y));
-        maxHandYMax = (int)(maxHandYMax * EnvironmentSettings.Settings.HandMovingScale.Y);
+        maxHandYMax = (int)(maxHandYMax * -EnvironmentSettings.Settings.HandMovingScale.Y);
         float gravity = EnvironmentSettings.Settings.Gravity;
         int maxBallYMax = (int)(0.5f * gravity * timeHMax * timeHMax);
         long marginBottom = 100;
