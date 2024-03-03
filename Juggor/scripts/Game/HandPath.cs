@@ -7,7 +7,7 @@ public partial class HandPath : Path2D
         Curve = new Curve2D();
         if (phase == HandPathPhase.Catch)
         {
-            var yDiff = EnvironmentSettings.Settings.HandMovingScale.Y * 2;
+            var yDiff = EnvironmentSettings.Settings.HandMovingScale.Y * 4;
             var mid = new Vector2((from.X + to.X) / 2f, to.Y + yDiff);
             Curve.AddPoint(from, null, new Vector2(0, yDiff));
             Curve.AddPoint(mid);
