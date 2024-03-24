@@ -92,12 +92,47 @@ public partial class CameraController : Node2D
 
     private void ZoomIn(Vector2 zoomPosition)
     {
-        Zoom(zoomPosition, zoomPermil + 200);
+        long newZoomPermil = zoomPermil;
+        int digitM1 = (int)Math.Log10(zoomPermil);
+        long mod = newZoomPermil % (long)Math.Pow(10, digitM1);
+        if (mod > 0)
+        {
+            newZoomPermil += (long)Math.Pow(10, digitM1) - mod;
+        }
+        else
+        {
+            newZoomPermil += (long)Math.Pow(10, digitM1);
+        }
+
+        long beforeZSoomPermil = zoomPermil;
+        Zoom(zoomPosition, newZoomPermil);
+        Logger.Debug($"ZoomIn before={beforeZSoomPermil} after={zoomPermil}");
     }
 
     private void ZoomOut(Vector2 zoomPosition)
     {
-        Zoom(zoomPosition, zoomPermil - 200);
+        long newZoomPermil = zoomPermil;
+        int digitM1 = (int)Math.Log10(zoomPermil);
+        long mod = newZoomPermil % (long)Math.Pow(10, digitM1);
+        if (mod > 0)
+        {
+            newZoomPermil -= mod;
+        }
+        else
+        {
+            if (newZoomPermil > (long)Math.Pow(10, digitM1))
+            {
+                newZoomPermil -= (long)Math.Pow(10, digitM1);
+            }
+            else
+            {
+                newZoomPermil -= (long)Math.Pow(10, digitM1 - 1);
+            }
+        }
+
+        long beforeZSoomPermil = zoomPermil;
+        Zoom(zoomPosition, newZoomPermil);
+        Logger.Debug($"ZoomOut before={beforeZSoomPermil} after={zoomPermil}");
     }
 
     private void Zoom(Vector2 zoomPosition, long newZoomPermil)
